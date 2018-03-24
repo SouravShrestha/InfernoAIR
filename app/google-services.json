@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "50667316699",
+    "firebase_url": "https://myair-e9a7d.firebaseio.com",
+    "project_id": "myair-e9a7d",
+    "storage_bucket": "myair-e9a7d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50667316699:android:5302c818075f23a4",
+        "android_client_info": {
+          "package_name": "com.example.souravshrestha.newsbullets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50667316699-l5iflmuigqfvvob00mfu3t1usnd4pjq6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.souravshrestha.newsbullets",
+            "certificate_hash": "c4655d8f5adf8bbe740df264b45836213422e269"
+          }
+        },
+        {
+          "client_id": "50667316699-rankjdjbmcao2202j1r8mc7kte44kmt6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNB210zGWhZz36yZprzS9_AHXA3RxevEs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50667316699-rankjdjbmcao2202j1r8mc7kte44kmt6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

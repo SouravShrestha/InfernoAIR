@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@mipmap/ic_home_black_24dp"
+        android:checkable="true"
+        android:checked="false"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@mipmap/ic_settings_black_24dp"
+        android:checkable="true"
+        android:title="Settings" />
+
+    <item android:id="@+id/aboutUs"
+        android:icon="@mipmap/ic_info_black_24dp"
+        android:checkable="true"
+        android:title="About Us"/>
+</menu>

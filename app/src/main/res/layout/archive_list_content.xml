@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+android:layout_width="match_parent"
+android:layout_height="75dp"
+android:orientation="horizontal">
+
+<de.hdodenhof.circleimageview.CircleImageView
+    android:layout_width="match_parent"
+    app:srcCompat="@drawable/mann_ki_baat"
+    android:id="@+id/img_arc_img"
+    android:layout_weight=".9"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    android:layout_margin="15dp" />
+
+<TextView
+    android:text="Title Goes Here"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foreground="?selectableItemBackground"
+    android:id="@+id/txt_arc_title"
+    android:layout_weight=".7"
+    android:gravity="left|center"
+    android:padding="10dp"
+    android:textSize="18sp" />
+
+<TextView
+    android:text="Date"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/arc_date"
+    android:layout_weight=".8"
+    android:padding="10dp"
+    android:gravity="center" />
+</LinearLayout>
+<View
+android:layout_width="match_parent"
+android:background="@color/backCard"
+android:layout_height="1dp" />
+    </LinearLayout>
