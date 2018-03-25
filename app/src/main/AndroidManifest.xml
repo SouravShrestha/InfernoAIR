@@ -23,7 +23,8 @@
         <activity android:name=".TextNews" />
         <activity android:name=".RadioAll" />
         <activity android:name=".EachArchiveActivity" />
-        <activity android:name=".ArchiveAll"></activity>
+        <activity android:name=".ArchiveAll" />
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

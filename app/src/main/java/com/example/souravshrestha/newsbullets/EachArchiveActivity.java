@@ -84,7 +84,7 @@ public class EachArchiveActivity extends AppCompatActivity {
     private void loadArchives() {
 
         FirebaseRecyclerAdapter<ArchiveReference,EachArchiveActivity.ArchiveViewHolder> firebaseRecyclerAdapter1 = new FirebaseRecyclerAdapter<ArchiveReference,EachArchiveActivity.ArchiveViewHolder>(
-                ArchiveReference.class,R.layout.archive_list_content,EachArchiveActivity.ArchiveViewHolder.class,mDatabaseArchive.child("List")
+                ArchiveReference.class,R.layout.archive_list_content,EachArchiveActivity.ArchiveViewHolder.class,mDatabaseArchive.child("List").orderByChild("title")
         ) {
             @Override
             protected void populateViewHolder(final EachArchiveActivity.ArchiveViewHolder viewHolder,final ArchiveReference model, int position) {

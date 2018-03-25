@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -36,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 ArrayList<String> dropItemsListRnd = new ArrayList<>(dropItemsRnd);
+                Collections.sort(dropItemsListRnd);
                 for(int i =0 ;i<dropItemsListRnd.size();i++){
                     String x = dropItemsListRnd.get(i);
                     if(x.equalsIgnoreCase(currRegion)){
@@ -260,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
+                Collections.sort(dropItemsList);
                 for(int i =0 ;i<dropItemsList.size();i++){
                     String x = dropItemsList.get(i);
                     if(x.equalsIgnoreCase(currLanguage)){
@@ -289,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         finish();
                         break;
                     case R.id.settings :
-                        Toast.makeText(MainActivity.this,item.getTitle(),Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.aboutUs:
                         Toast.makeText(MainActivity.this,item.getTitle(),Toast.LENGTH_SHORT).show();
