@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -552,7 +553,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onClick(View view) {
                         double counter  = Double.parseDouble(model.getCount()) - 1;
                         mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
-                        Toast.makeText(MainActivity.this,model.getUrl().toString(),Toast.LENGTH_SHORT).show();
+                        try {
+                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext());
+                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }

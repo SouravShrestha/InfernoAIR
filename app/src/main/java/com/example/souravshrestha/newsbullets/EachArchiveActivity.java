@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EachArchiveActivity extends AppCompatActivity {
@@ -121,8 +123,12 @@ public class EachArchiveActivity extends AppCompatActivity {
             titleArc.setText(title);
             titleArc.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Toast.makeText(con,url,Toast.LENGTH_SHORT).show();
+                public void onClick(View view) {try {
+                    MediaPlayerMain.initializeMediaPlayer(url,con);
+                    MediaPlayerMain.playIt(url,con);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 }
             });
         }

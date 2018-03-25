@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -297,8 +298,12 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
             mTextBullet.setText(textDate);
             mPlayEach.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    Toast.makeText(con,url,Toast.LENGTH_SHORT).show();
+                public void onClick(View view) {try {
+                    MediaPlayerMain.initializeMediaPlayer(url,con);
+                    MediaPlayerMain.playIt(url,con);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 }
             });
         }

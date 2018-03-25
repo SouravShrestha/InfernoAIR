@@ -23,6 +23,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
+
 public class RadioAll extends AppCompatActivity {
 
 
@@ -92,7 +94,12 @@ public class RadioAll extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(RadioAll.this,model.getUrl().toString(),Toast.LENGTH_SHORT).show();
+                        try {
+                        MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext());
+                        MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     }
                 });
             }
