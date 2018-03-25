@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 
 import nl.changer.audiowife.AudioWife;
@@ -48,6 +49,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     Toolbar mActionNav;
     HashSet<String> dropItems = new HashSet<String>();
     Spinner dropDown;
+    static String curLang;
     ArrayList<String> validName = new ArrayList<>();
     private DrawerLayout mDraw;
     private NavigationView mNav;
@@ -70,6 +72,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         selectDate = (TextView)findViewById(R.id.datePick);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         title = getIntent().getExtras().getString("bulletName");
+        curLang = getIntent().getExtras().getString("curLang");
         head = getIntent().getExtras().getString("bulletTitle");
         mTextHead = (TextView)findViewById(R.id.tHeadList);
         dropDown = (Spinner)findViewById(R.id.spin);
@@ -180,6 +183,15 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
                 }
 
                 ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
+                Collections.sort(dropItemsList);
+                for(int i =0 ;i<dropItemsList.size();i++){
+                    String x = dropItemsList.get(i);
+                    if(x.equalsIgnoreCase(curLang)){
+                        int index = dropItemsList.indexOf(x);
+                        dropItemsList.remove(index);
+                        dropItemsList.add(0,x);
+                    }
+                }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(EachBulletActivity.this, android.R.layout.simple_spinner_item,dropItemsList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDown.setAdapter(adapter);

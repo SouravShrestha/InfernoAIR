@@ -195,6 +195,40 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dropItems.clear();
+                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
+                for (DataSnapshot parentLang : langChildren1) {
+                    DataSnapshot langSnapshot = parentLang.child("Language");
+                    Iterable<DataSnapshot> langChildren = langSnapshot.getChildren();
+                    for (DataSnapshot lang : langChildren) {
+                        dropItems.add(lang.getValue(String.class));
+                    }
+                }
+
+                ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
+                Collections.sort(dropItemsList);
+                for(int i =0 ;i<dropItemsList.size();i++){
+                    String x = dropItemsList.get(i);
+                    if(x.equalsIgnoreCase(currLanguage)){
+                        int index = dropItemsList.indexOf(x);
+                        dropItemsList.remove(index);
+                        dropItemsList.add(0,x);
+                    }
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,dropItemsList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dropDown.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this,imageUrl,clickUrl);
 
@@ -243,41 +277,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View view) {
                 Intent goAll = new Intent(getApplicationContext(),NewsBulletins.class);
+                goAll.putExtra("curLangg",currLanguage);
                 startActivity(goAll);
-            }
-        });
-
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dropItems.clear();
-                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
-                for (DataSnapshot parentLang : langChildren1) {
-                    DataSnapshot langSnapshot = parentLang.child("Language");
-                    Iterable<DataSnapshot> langChildren = langSnapshot.getChildren();
-                    for (DataSnapshot lang : langChildren) {
-                        dropItems.add(lang.getValue(String.class));
-                    }
-                }
-
-                ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
-                Collections.sort(dropItemsList);
-                for(int i =0 ;i<dropItemsList.size();i++){
-                    String x = dropItemsList.get(i);
-                    if(x.equalsIgnoreCase(currLanguage)){
-                        int index = dropItemsList.indexOf(x);
-                        dropItemsList.remove(index);
-                        dropItemsList.add(0,x);
-                    }
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,dropItemsList);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                dropDown.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -306,6 +307,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
         switch (parent.getId()) {
             case R.id.spinner:
+                currLanguage = parent.getItemAtPosition(pos).toString();
                 loadBullet1(parent.getItemAtPosition(pos).toString());
                 break;
             case R.id.spinner_rnd:
@@ -519,6 +521,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 double counter  = Double.parseDouble(model.getCount()) - 1;
                                 mDatabase.child(getRef(position).getKey()).child("count").setValue(String.valueOf(counter));
                                 Intent eachBullet = new Intent(MainActivity.this, EachBulletActivity.class);
+                                eachBullet.putExtra("curLang",currLanguage);
                                 eachBullet.putExtra("bulletName", (getRef(position).getKey()));
                                 eachBullet.putExtra("bulletTitle", model.getTitle());
                                 startActivity(eachBullet);

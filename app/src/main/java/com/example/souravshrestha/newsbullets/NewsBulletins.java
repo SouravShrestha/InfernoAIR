@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,6 +39,7 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
     RecyclerView mBulletList;
     private DatabaseReference mDatabase;
     Spinner dropDown;
+    static String curLang;
     ArrayList<String> validName = new ArrayList<>();
     HashSet<String> dropItems = new HashSet<String>();
     private DrawerLayout mDraw;
@@ -59,6 +61,7 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("NewsBullets");
         mBulletList = (RecyclerView)findViewById(R.id.recAll);
+        curLang = getIntent().getExtras().getString("curLangg");
         mBulletList.setHasFixedSize(true);
         dropDown = (Spinner)findViewById(R.id.spin3);
         dropDown.setOnItemSelectedListener(this);
@@ -78,6 +81,15 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
                 }
 
                 ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
+                Collections.sort(dropItemsList);
+                for(int i =0 ;i<dropItemsList.size();i++){
+                    String x = dropItemsList.get(i);
+                    if(x.equalsIgnoreCase(curLang)){
+                        int index = dropItemsList.indexOf(x);
+                        dropItemsList.remove(index);
+                        dropItemsList.add(0,x);
+                    }
+                }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewsBulletins.this, android.R.layout.simple_spinner_item,dropItemsList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDown.setAdapter(adapter);
