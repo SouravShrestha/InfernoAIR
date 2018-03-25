@@ -1,6 +1,8 @@
 package com.example.souravshrestha.newsbullets;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -113,11 +115,21 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
                     case R.id.settings :
                         Toast.makeText(NewsBulletins.this,item.getTitle(),Toast.LENGTH_SHORT).show();
                         break;
-                    case R.id.aboutUs:
-                        Toast.makeText(NewsBulletins.this,item.getTitle(),Toast.LENGTH_SHORT).show();
+                    case R.id.language:
                         break;
+                    case R.id.openBrowser:
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.newsonair.com/")));
+                        break;
+                    case R.id.rate:
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store")));
+                        break;
+                    case R.id.email:
+                        try{
+                            Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "shrestha.sourav30@gmail.com"));
+                            startActivity(intent);
+                        }catch(ActivityNotFoundException e){
+                        }
                 }
-                mNav.setCheckedItem(item.getItemId());
                 return false;
             }
         });

@@ -1,21 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@mipmap/ic_home_black_24dp"
+            android:checkable="true"
+            android:checked="false"
+            android:title="Home" />
 
-    <item
-        android:id="@+id/home"
-        android:icon="@mipmap/ic_home_black_24dp"
-        android:checkable="true"
-        android:checked="false"
-        android:title="Home" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@mipmap/ic_settings_black_24dp"
+            android:checkable="true"
+            android:title="Settings" />
 
-    <item
-        android:id="@+id/settings"
-        android:icon="@mipmap/ic_settings_black_24dp"
-        android:checkable="true"
-        android:title="Settings" />
+        <item
+            android:id="@+id/language"
+            android:icon="@mipmap/ic_language_black_18dp"
+            android:checkable="true"
+            android:title="Change Language" />
 
-    <item android:id="@+id/aboutUs"
-        android:icon="@mipmap/ic_info_black_24dp"
-        android:checkable="true"
-        android:title="About Us"/>
+    </group>
+    <group android:checkableBehavior="single">
+        <item android:title="Connect With us">
+            <menu>
+                <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/email"
+                    android:icon="@mipmap/ic_email_black_24dp"
+                    android:checkable="true"
+                    android:checked="false"
+                    android:title="Contact Us" />
+
+                <item
+                    android:id="@+id/openBrowser"
+                    android:icon="@mipmap/ic_open_in_browser_black_24dp"
+                    android:checkable="true"
+                    android:title="Visit Our Website" />
+
+                <item android:id="@+id/rate"
+                    android:icon="@mipmap/ic_star_rate_black_18dp"
+                    android:checkable="true"
+                    android:title="Rate Us"/>
+
+                    <item android:id="@+id/aboutUs"
+                        android:icon="@mipmap/ic_info_black_24dp"
+                        android:checkable="true"
+                        android:title="About Us"/>
+                </group>
+            </menu>
+        </item>
+    </group>
 </menu>
