@@ -9,5 +9,7 @@
         android:layout_height="match_parent"
         app:srcCompat="@mipmap/ic_launcher"
         android:layout_width="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:cropToPadding="false"
+        android:adjustViewBounds="false" />
 </LinearLayout>

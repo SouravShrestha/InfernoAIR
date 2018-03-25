@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,6 +45,7 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
     private DrawerLayout mDraw;
     private NavigationView mNav;
     private ActionBarDrawerToggle mToggle;
+    Toolbar mActionNav;
     String title="";
     String region;
     long count;
@@ -60,6 +62,8 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
         mNav = (NavigationView) findViewById(R.id.navBar3);
         mDraw =(DrawerLayout) findViewById(R.id.regional_bulletins);
         mToggle = new ActionBarDrawerToggle(this,mDraw,R.string.open,R.string.close);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         mDraw.addDrawerListener(mToggle);
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

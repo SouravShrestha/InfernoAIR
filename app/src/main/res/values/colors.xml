@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#3a4249</color>
     <color name="colorAccent">#FF4081</color>
     <color name="playColor">#9ad19b</color>
-    <color name="backCard">#ECEFF1</color>
+    <color name="backCard">#f9fafc</color>
 </resources>

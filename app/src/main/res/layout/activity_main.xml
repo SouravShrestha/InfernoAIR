@@ -18,17 +18,26 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
     android:scrollbars="none"
     android:overScrollMode="never"
     tools:context="com.example.souravshrestha.newsbullets.MainActivity"
-    android:background="@color/backCard">
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/backCard">
+
+
+
+        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
+            android:id="@+id/mNav" />
 
         <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_margin="8dp"
-        android:id="@+id/cardBanner"
-        android:layout_height="175dp">
+            android:id="@+id/cardBanner"
+        android:layout_height="175dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/mNav">
 
             <android.support.v4.view.ViewPager
                 android:layout_width="match_parent"
@@ -74,19 +83,23 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:paddingTop="5dp"
-                android:paddingBottom="10dp" />
+                android:paddingBottom="10dp"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black" />
 
         </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
             android:id="@+id/hScroll"
+            android:scrollbars="none"
             android:layout_below="@+id/title_list_trending"
-            android:overScrollMode="never">
+            android:overScrollMode="never"
+            android:background="@color/backCard"
+            android:layout_height="150dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="150dp"
                 android:orientation="horizontal">
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -116,49 +129,53 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             </LinearLayout>
         </HorizontalScrollView>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/title_list_radio"
-        android:background="@color/backCard"
-        android:layout_below="@+id/hScroll"
-        android:layout_marginTop="-15dp">
-
-        <TextView
-            android:text="Live FM"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/titleText_radio"
-            android:padding="2dp"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:paddingTop="5dp" />
+            android:id="@+id/title_list_radio"
+            android:background="@color/backCard"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/hScroll"
+            android:gravity="center_vertical">
 
-        <Button
-            android:text="View All"
-            android:foreground="?selectableItemBackground"
-            android:layout_width="78dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/viewAllClick_radio"
-            android:background="@android:color/transparent"
-            android:textAllCaps="false"
-            android:textColor="@color/cardview_dark_background"
-            android:layout_weight=".1" />
+            <TextView
+                android:text="Live FM"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/titleText_radio"
+                android:padding="2dp"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:paddingTop="5dp"
+                android:gravity="center_vertical"
+                android:textColor="@android:color/black" />
 
-    </LinearLayout>
+            <Button
+                android:text="View All"
+                android:foreground="?selectableItemBackground"
+                android:layout_width="78dp"
+                android:id="@+id/viewAllClick_radio"
+                android:background="@drawable/view_all_layout"
+                android:textAllCaps="false"
+                android:textColor="@color/cardview_dark_background"
+                android:layout_weight=".1"
+                android:layout_marginRight="5dp"
+                android:layout_height="30dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:id="@+id/radioView_radio"
-        android:background="@color/backCard"
-        android:layout_below="@+id/title_list_radio"
-        android:overScrollMode="never"
-        android:layout_height="160dp"
-        android:layout_marginTop="-5dp">
+        </LinearLayout>
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+       android:layout_width="match_parent"
+       android:id="@+id/radioView_radio"
+       android:background="@color/backCard"
+       android:layout_below="@+id/title_list_radio"
+       android:overScrollMode="never"
+       android:layout_height="150dp"
+            android:layout_marginTop="5dp">
+
+   </android.support.v7.widget.RecyclerView>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -167,7 +184,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:id="@+id/title_rnd"
             android:background="@color/backCard"
             android:layout_below="@+id/radioView_radio"
-            android:layout_marginTop="-15dp">
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:text="Regional Bulletins"
@@ -178,7 +195,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:padding="2dp"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
-                android:paddingTop="5dp" />
+                android:paddingTop="5dp"
+                android:textColor="@android:color/black" />
 
             <Spinner
                 android:layout_width="wrap_content"
@@ -199,63 +217,66 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:id="@+id/rndView"
             android:background="@color/backCard"
             android:layout_below="@+id/title_rnd"
-            android:layout_height="160dp"
+            android:layout_height="150dp"
             android:overScrollMode="never"
-            android:layout_marginTop="-5dp">
+            android:layout_marginTop="5dp">
 
         </android.support.v7.widget.RecyclerView>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/title_list"
-        android:background="@color/backCard"
-        android:layout_below="@+id/rndView"
-        android:layout_marginTop="-15dp">
-
-        <TextView
-            android:text="News Bulletins"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/titleText"
-            android:layout_weight="1"
-            android:padding="2dp"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="5dp" />
+            android:id="@+id/title_list"
+            android:background="@color/backCard"
+            android:layout_below="@+id/rndView"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:id="@+id/spinner"
-            android:padding="10dp"
-            android:layout_height="40dp"
-            android:layout_weight="4" />
+            <TextView
+                android:text="News Bulletins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/titleText"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="@android:color/black" />
 
-        <Button
-            android:text="View All"
-            android:foreground="?selectableItemBackground"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/viewAllClick"
-            android:padding="10dp"
-            android:background="@android:color/transparent"
-            android:textAllCaps="false"
-            android:textColor="@color/cardview_dark_background"
-            android:layout_weight=".2" />
+            <Spinner
+                android:layout_width="wrap_content"
+                android:id="@+id/spinner"
+                android:padding="10dp"
+                android:layout_height="40dp"
+                android:layout_weight="4" />
 
-    </LinearLayout>
+            <Button
+                android:text="View All"
+                android:foreground="?selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/viewAllClick"
+                android:background="@drawable/view_all_layout"
+                android:textAllCaps="false"
+                android:textColor="@color/cardview_dark_background"
+                android:layout_weight=".2"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:id="@+id/bulletsView"
-        android:background="@color/backCard"
-        android:layout_below="@+id/title_list"
-        android:overScrollMode="never"
-        android:layout_height="160dp"
-        android:layout_marginTop="-5dp">
+        </LinearLayout>
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/bulletsView"
+            android:background="@color/backCard"
+            android:layout_below="@+id/title_list"
+            android:overScrollMode="never"
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp">
+
+        </android.support.v7.widget.RecyclerView>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -264,7 +285,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:id="@+id/title_list_archive"
             android:background="@color/backCard"
             android:layout_below="@+id/bulletsView"
-            android:layout_marginTop="-15dp">
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:text="Archives"
@@ -275,19 +297,20 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:paddingTop="5dp" />
+                android:paddingTop="5dp"
+                android:textColor="@android:color/black" />
 
             <Button
                 android:text="View All"
                 android:foreground="?selectableItemBackground"
                 android:layout_width="78dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:id="@+id/viewAllClick_archive"
-                android:padding="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/view_all_layout"
                 android:textAllCaps="false"
                 android:textColor="@color/cardview_dark_background"
-                android:layout_weight=".05" />
+                android:layout_weight=".05"
+                android:layout_marginRight="5dp" />
 
         </LinearLayout>
 
@@ -297,8 +320,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:background="@color/backCard"
             android:layout_below="@+id/title_list_archive"
             android:overScrollMode="never"
-            android:layout_height="160dp"
-            android:layout_marginTop="-5dp">
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp">
 
         </android.support.v7.widget.RecyclerView>
 

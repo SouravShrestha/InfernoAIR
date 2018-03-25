@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     HashSet<String> dropItems = new HashSet<String>();
     HashSet<String> dropItemsRnd = new HashSet<String>();
     TextView textNews,vAllLive;
-    Button vAll,vAllArchive;
+    TextView vAll;
+    Toolbar mActionNav;
+    TextView vAllArchive;
     Spinner dropDown,dropDownRadioMain,dropDownRnd;
     private DrawerLayout mDraw;
     private NavigationView mNav;
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         currRegion = "Aurangabad";
         currLanguage = "English";
         mNav = (NavigationView) findViewById(R.id.navBar);
@@ -108,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         myStr= FirebaseStorage.getInstance().getReference();
         dropDown.setOnItemSelectedListener(this);
         dropDownRnd.setOnItemSelectedListener(this);
-        vAllArchive = (Button) findViewById(R.id.viewAllClick_archive);
-        vAll = (Button)findViewById(R.id.viewAllClick);
+        vAllArchive = (TextView) findViewById(R.id.viewAllClick_archive);
+        vAll = (TextView)findViewById(R.id.viewAllClick);
         myRef = FirebaseDatabase.getInstance().getReference().child("ListBanner");
         viewPager=(ViewPager)findViewById(R.id.viewpager);
         indicator=(CircleIndicator) findViewById(R.id.indicator);

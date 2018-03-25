@@ -13,11 +13,15 @@
         android:layout_height="match_parent"
         android:background="@color/backCard">
 
+        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
+            android:id="@+id/mNav" />
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:id="@+id/cardArchiveImage"
         android:layout_margin="5dp"
-        android:layout_height="150dp">
+        android:layout_height="150dp"
+        android:layout_below="@+id/mNav">
 
         <ImageView
             android:layout_width="wrap_content"

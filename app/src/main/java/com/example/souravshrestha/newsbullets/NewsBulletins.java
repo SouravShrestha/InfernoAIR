@@ -11,6 +11,7 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,6 +42,7 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
     HashSet<String> dropItems = new HashSet<String>();
     private DrawerLayout mDraw;
     private NavigationView mNav;
+    Toolbar mActionNav;
     private ActionBarDrawerToggle mToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_news_bulletins);
         mNav = (NavigationView) findViewById(R.id.navBar2);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout1);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         mToggle = new ActionBarDrawerToggle(this,mDraw,R.string.open,R.string.close);
         mDraw.addDrawerListener(mToggle);
         mToggle.syncState();

@@ -12,12 +12,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
+            android:id="@+id/mNav" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linew">
+        android:id="@+id/linew"
+        android:layout_below="@+id/mNav">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"

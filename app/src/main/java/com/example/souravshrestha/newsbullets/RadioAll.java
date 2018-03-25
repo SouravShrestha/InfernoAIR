@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ public class RadioAll extends AppCompatActivity {
     private NavigationView mNav;
     RecyclerView mRadioList;
     private DatabaseReference mDatabase;
+    Toolbar mActionNav;
     private ActionBarDrawerToggle mToggle;
 
     @Override
@@ -37,6 +39,8 @@ public class RadioAll extends AppCompatActivity {
         setContentView(R.layout.activity_radio_all);
         mNav = (NavigationView) findViewById(R.id.navBar_radio);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout_radio);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         mToggle = new ActionBarDrawerToggle(this,mDraw,R.string.open,R.string.close);
         mDraw.addDrawerListener(mToggle);
         mToggle.syncState();

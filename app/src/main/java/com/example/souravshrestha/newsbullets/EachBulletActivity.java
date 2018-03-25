@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,6 +45,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     TextView mTextHead;
     String title,head;
     String dateSelected="";
+    Toolbar mActionNav;
     HashSet<String> dropItems = new HashSet<String>();
     Spinner dropDown;
     ArrayList<String> validName = new ArrayList<>();
@@ -59,6 +61,8 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_bullet);
         mNav = (NavigationView) findViewById(R.id.navBar1);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout2);
         mToggle = new ActionBarDrawerToggle(this,mDraw,R.string.open,R.string.close);
         mDraw.addDrawerListener(mToggle);

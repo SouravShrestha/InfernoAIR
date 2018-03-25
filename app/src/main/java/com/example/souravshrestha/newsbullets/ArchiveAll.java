@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ public class ArchiveAll extends AppCompatActivity {
     private DrawerLayout mDraw;
     private NavigationView mNav;
     RecyclerView mArchiveList;
+    Toolbar mActionNav;
     private DatabaseReference mDatabase;
     private ActionBarDrawerToggle mToggle;
 
@@ -35,6 +37,8 @@ public class ArchiveAll extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_archive_all);
         mNav = (NavigationView) findViewById(R.id.navBar_arc);
+        mActionNav = (Toolbar)findViewById(R.id.mNav);
+        setSupportActionBar(mActionNav);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout_archive);
         mToggle = new ActionBarDrawerToggle(this,mDraw,R.string.open,R.string.close);
         mDraw.addDrawerListener(mToggle);
