@@ -107,7 +107,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:layout_height="150dp"
             android:layout_below="@+id/title_list_trending"
             android:layout_alignLeft="@+id/cardBanner"
-            android:layout_alignStart="@+id/cardBanner">
+            android:layout_alignStart="@+id/cardBanner"
+            android:layout_marginLeft="-5dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
