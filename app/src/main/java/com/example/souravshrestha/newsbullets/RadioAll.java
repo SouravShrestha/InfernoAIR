@@ -16,10 +16,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +36,8 @@ public class RadioAll extends AppCompatActivity {
     private DrawerLayout mDraw;
     private NavigationView mNav;
     RecyclerView mRadioList;
+    TextView mPlayTitle;
+    Button playPause;
     private DatabaseReference mDatabase;
     Toolbar mActionNav;
     private ActionBarDrawerToggle mToggle;
@@ -42,6 +47,10 @@ public class RadioAll extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio_all);
         mNav = (NavigationView) findViewById(R.id.navBar_radio);
+        playPause = (Button)findViewById(R.id.bPlayPause1);
+        MediaPlayerMain.changeButton(playPause);
+        mPlayTitle = (TextView)findViewById(R.id.playTitle1);
+        mPlayTitle.setText(MediaPlayerMain.textLabel);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout_radio);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
         setSupportActionBar(mActionNav);
@@ -80,10 +89,37 @@ public class RadioAll extends AppCompatActivity {
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                        break;
+
+                    case R.id.aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(RadioAll.this);
+                        dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
                 }
                 return false;
             }
         });
+
+        playPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MediaPlayerMain.pauseIt(playPause);
+            }
+        });
+
 
     }
 
@@ -107,17 +143,26 @@ public class RadioAll extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         try {
-                        MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext());
-                        MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                            mPlayTitle.setText(model.getTitle());
+                            MediaPlayerMain.textLabel = model.getTitle();
+                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext(),playPause);
+                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext(),playPause);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
         };
 
         mRadioList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        MainActivity.mPlayTitle.setText(MediaPlayerMain.textLabel);
+        MediaPlayerMain.changeButton(MainActivity.playPause);
     }
 
     public static class RadioViewHolder extends RecyclerView.ViewHolder{

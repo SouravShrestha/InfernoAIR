@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -41,13 +43,13 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 
-import nl.changer.audiowife.AudioWife;
-
 public class EachBulletActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     RecyclerView mEachBulletList;
     TextView mTextHead;
     String title,head;
+    TextView mPlayTitle;
+    Button playPause;
     String dateSelected="";
     Toolbar mActionNav;
     HashSet<String> dropItems = new HashSet<String>();
@@ -66,6 +68,8 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_bullet);
         mNav = (NavigationView) findViewById(R.id.navBar1);
+        playPause = (Button)findViewById(R.id.bPlayPause);
+        mPlayTitle = (TextView)findViewById(R.id.playTitle);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
         setSupportActionBar(mActionNav);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout2);
@@ -127,6 +131,25 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                        break;
+
+                    case R.id.aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(EachBulletActivity.this);
+                        dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
                 }
                 return false;
             }
@@ -266,7 +289,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
 
                 if(validName.contains((getRef(position).getKey()))) {
                     validName.remove((getRef(position).getKey()));
-                    viewHolder.setDetails(getApplicationContext(),model.getUrl(),EachArchiveActivity.properDate(model.getDate()));
+                    viewHolder.setDetails(getApplicationContext(),model.getUrl(),EachArchiveActivity.properDate(model.getDate()),playPause);
                 }else{
                     viewHolder.itemView.setVisibility(View.GONE);
                     viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
@@ -304,15 +327,15 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
             mView = itemView;
         }
 
-        public void setDetails(final Context con,final String url,String textDate){
+        public void setDetails(final Context con,final String url,String textDate,final Button playPause){
             Button mPlayEach = (Button) mView.findViewById(R.id.eachBulletButton);
             TextView mTextBullet = (TextView)mView.findViewById(R.id.bullet_date);
             mTextBullet.setText(textDate);
             mPlayEach.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {try {
-                    MediaPlayerMain.initializeMediaPlayer(url,con);
-                    MediaPlayerMain.playIt(url,con);
+                    MediaPlayerMain.initializeMediaPlayer(url,con,playPause);
+                    MediaPlayerMain.playIt(url,con,playPause);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

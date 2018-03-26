@@ -23,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -129,6 +131,25 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                        break;
+
+                    case R.id.aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(NewsBulletins.this);
+                        dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
                 }
                 return false;
             }

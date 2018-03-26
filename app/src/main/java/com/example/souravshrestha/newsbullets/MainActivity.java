@@ -19,12 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -41,24 +44,25 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
 import me.relex.circleindicator.CircleIndicator;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    RecyclerView mBulletList,mRadioList,mArchiveList,mRegionalList,mTrendingView,mTrendingView2,mTrendingView3;
+    RecyclerView mBulletList,mRadioList,mArchiveList,mRegionalList,mTrendingView,mTrendingView2,mTrendingView3,mViewText;
     HashSet<String> dropItems = new HashSet<String>();
     HashSet<String> dropItemsRnd = new HashSet<String>();
+    HashSet<String> dropItemsTextNews = new HashSet<String>();
     TextView textNews,vAllLive;
     TextView vAll;
     Toolbar mActionNav;
-    TextView vAllArchive;
-    Spinner dropDown,dropDownRadioMain,dropDownRnd;
+    public static TextView vAllArchive,mPlayTitle;
+    Spinner dropDown,dropDownRadioMain,dropDownRnd,dropDownNewsText;
     private DrawerLayout mDraw;
     private NavigationView mNav;
     static String currRegion;
     static String currLanguage;
+    public static Button playPause;
     private ActionBarDrawerToggle mToggle;
-    private DatabaseReference mDatabase,mDatabaseRadio,mDatabaseRegional,mDatabaseArchive;
+    private DatabaseReference mDatabase,mDatabaseRadio,mDatabaseRegional,mDatabaseArchive,mDatabaseNewsText;
     private LayoutInflater layoutInflater;
     ViewPager viewPager;
     StorageReference myStr;
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<String> radioMainListSpinner = new ArrayList<>();
     ArrayList<String> validName = new ArrayList<>();
     ArrayList<String> validNameRnd = new ArrayList<>();
+    ArrayList<String> validNameNews = new ArrayList<>();
     ArrayList<String> imageUrl = new ArrayList<>();
     ArrayList<String> clickUrl = new ArrayList<>();
     Handler handler = new Handler();
@@ -82,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
+        playPause = (Button)findViewById(R.id.bPlayPause);
+        MediaPlayerMain.changeButton(playPause);
+        mPlayTitle = (TextView)findViewById(R.id.playTitle);
+        mPlayTitle.setText(MediaPlayerMain.textLabel);
         setSupportActionBar(mActionNav);
         currRegion = "Aurangabad";
         currLanguage = "English";
@@ -92,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNav.setCheckedItem(R.id.home);
-        textNews= (TextView)findViewById(R.id.TextNews);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("NewsBullets");
         mDatabaseRegional = FirebaseDatabase.getInstance().getReference().child("RegionalBulletins");
+        mDatabaseNewsText = FirebaseDatabase.getInstance().getReference().child("TextNews");
         mDatabaseArchive = FirebaseDatabase.getInstance().getReference().child("Archives");
         mDatabaseRadio = FirebaseDatabase.getInstance().getReference().child("Stations");
         mBulletList = (RecyclerView)findViewById(R.id.bulletsView);
@@ -106,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mTrendingView2 = (RecyclerView)findViewById(R.id.trending_view2);
         mTrendingView2.setHasFixedSize(true);
         mTrendingView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mViewText = (RecyclerView)findViewById(R.id.viewTextNews);
+        mViewText.setHasFixedSize(true);
+        mViewText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTrendingView3 = (RecyclerView)findViewById(R.id.trending_view3);
         mTrendingView3.setHasFixedSize(true);
         mTrendingView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -113,9 +125,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mRegionalList = (RecyclerView)findViewById(R.id.rndView);
         dropDown = (Spinner)findViewById(R.id.spinner);
         dropDownRnd = (Spinner)findViewById(R.id.spinner_rnd);
+        dropDownNewsText = (Spinner)findViewById(R.id.spinnerTextNews);
         myStr= FirebaseStorage.getInstance().getReference();
         dropDown.setOnItemSelectedListener(this);
         dropDownRnd.setOnItemSelectedListener(this);
+        dropDownNewsText.setOnItemSelectedListener(this);
         vAllArchive = (TextView) findViewById(R.id.viewAllClick_archive);
         vAll = (TextView)findViewById(R.id.viewAllClick);
         myRef = FirebaseDatabase.getInstance().getReference().child("ListBanner");
@@ -136,14 +150,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         loadArchiveList();
         loadBullet();
 
-        textNews.setOnClickListener(new View.OnClickListener() {
+        playPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent tN = new Intent(MainActivity.this,TextNews.class);
-                startActivity(tN);
+                MediaPlayerMain.pauseIt(playPause);
             }
         });
-
 
         vAllArchive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,6 +202,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 ArrayAdapter<String> adapterRnd = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,dropItemsListRnd);
                 adapterRnd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDownRnd.setAdapter(adapterRnd);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dropItemsTextNews.clear();
+                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
+                for (DataSnapshot parentLang : langChildren1) {
+                    Iterable<DataSnapshot> langChildren = parentLang.getChildren();
+                    for (DataSnapshot lang : langChildren) {
+                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
+                        for (DataSnapshot lang1 : langChildren11) {
+                            if (lang1.getKey().equalsIgnoreCase("language"))
+                                dropItemsTextNews.add(lang1.getValue().toString());
+                        }
+                    }
+                }
+                    ArrayList<String> dropItemsListText = new ArrayList<>(dropItemsTextNews);
+                    Collections.sort(dropItemsListText);
+                    for (int i = 0; i < dropItemsListText.size(); i++) {
+                        String x = dropItemsListText.get(i);
+                        if (x.equalsIgnoreCase(currLanguage)) {
+                            int index = dropItemsListText.indexOf(x);
+                            dropItemsListText.remove(index);
+                            dropItemsListText.add(0, x);
+                        }
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, dropItemsListText);
+                        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        dropDownNewsText.setAdapter(adapter1);
+                    }
             }
 
             @Override
@@ -306,10 +354,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                    case R.id.aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(MainActivity.this);
+                                dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
 
     @Override
@@ -321,6 +396,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 break;
             case R.id.spinner_rnd:
                 loadRegionalList(parent.getItemAtPosition(pos).toString());
+                break;
+            case R.id.spinnerTextNews:
+                loadTextNewsList(parent.getItemAtPosition(pos).toString());
                 break;
         }
     }
@@ -424,6 +502,82 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         };
 
         mBulletList.setAdapter(firebaseRecyclerAdapter);
+    }
+
+    private void loadTextNewsList(final String language) {
+
+        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                validNameNews.clear();
+                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
+                for (DataSnapshot parentLang : langChildren1) {
+                    Iterable<DataSnapshot> langChildren = parentLang.getChildren();
+                    for (DataSnapshot lang : langChildren) {
+                        int k = 0;
+                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
+                        for (DataSnapshot lang1 : langChildren11) {
+                            if(lang1.getKey().equals("language") && lang1.getValue(String.class).equals(language)){
+                                k = 1;
+                            }
+                        }
+                        if(k==1){
+                            validNameNews.add(parentLang.child("title").getValue().toString());
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        FirebaseRecyclerAdapter<TextNewsDetails,TextNewsViewHolder> firebaseRecyclerAdapterRegional = new FirebaseRecyclerAdapter<TextNewsDetails, MainActivity.TextNewsViewHolder>(
+              TextNewsDetails.class,R.layout.text_news_card,TextNewsViewHolder.class,mDatabaseNewsText
+                    ) {
+                        @Override
+                        protected void populateViewHolder(final TextNewsViewHolder viewHolder, final TextNewsDetails model, final int position) {
+                            if(validNameNews.contains((getRef(position).getKey()))) {
+                                validNameNews.remove((getRef(position).getKey()));
+                                viewHolder.setDetailsTextNews(getApplicationContext(), model.getTitle(), model.getImage());
+                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent goText = new Intent(MainActivity.this,EachTextNews.class);
+                            goText.putExtra("title",model.getTitle());
+                            goText.putExtra("language",language);
+                            startActivity(goText);
+                        }
+                    });
+                }else{
+                    viewHolder.itemView.setVisibility(View.GONE);
+                    viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
+                }
+            }
+        };
+        mViewText.setAdapter(firebaseRecyclerAdapterRegional);
+    }
+
+    public static class TextNewsViewHolder extends RecyclerView.ViewHolder{
+
+        View mView;
+
+        public TextNewsViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+
+        public void setDetailsTextNews(Context con,String title_name,String img_src){
+            TextView title = (TextView)mView.findViewById(R.id.txt_txtNews);
+            ImageView arc_image_main = (ImageView)mView.findViewById(R.id.img_txtNews);
+            Glide.with(con).load(img_src).into(arc_image_main);
+            title.setText(title_name);
+        }
+
     }
 
     private void loadRegionalList(final String region) {
@@ -562,8 +716,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         double counter  = Double.parseDouble(model.getCount()) - 1;
                         mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
                         try {
-                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext());
-                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext());
+                            mPlayTitle.setText(model.getTitle());
+                            MediaPlayerMain.textLabel = model.getTitle();
+                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext(),playPause);
+                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext(),playPause);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

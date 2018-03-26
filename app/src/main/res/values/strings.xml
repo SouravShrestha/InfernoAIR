@@ -3,4 +3,5 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="prompt_dd">Select Language</string>
+    <string name="title_activity_each_text_news">EachTextNews</string>
 </resources>

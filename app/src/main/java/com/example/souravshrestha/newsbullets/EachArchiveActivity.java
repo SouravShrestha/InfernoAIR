@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EachArchiveActivity extends AppCompatActivity {
 
     String title;
-    TextView mTitle;
+    TextView mTitle,mPlayTitle;
+    Button playPause;
     private DrawerLayout mDraw;
     private NavigationView mNav;
     Toolbar mActionNav;
@@ -45,6 +48,8 @@ public class EachArchiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_archive);
+        playPause = (Button)findViewById(R.id.bPlayPause);
+        mPlayTitle = (TextView)findViewById(R.id.playTitle);
         mDraw =(DrawerLayout) findViewById(R.id.draw_archive);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
         setSupportActionBar(mActionNav);
@@ -88,6 +93,24 @@ public class EachArchiveActivity extends AppCompatActivity {
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                        break;
+                    case R.id.aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(EachArchiveActivity.this);
+                        dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
                 }
                 return false;
             }
@@ -102,7 +125,7 @@ public class EachArchiveActivity extends AppCompatActivity {
         ) {
             @Override
             protected void populateViewHolder(final EachArchiveActivity.ArchiveViewHolder viewHolder,final ArchiveReference model, int position) {
-                viewHolder.setDetails(getApplicationContext(), model.getImage(),model.getTitle(),properDate(model.getDate()), model.getUrl());
+                viewHolder.setDetails(getApplicationContext(), model.getImage(),model.getTitle(),properDate(model.getDate()), model.getUrl(),playPause);
             }
         };
         archiveView.setAdapter(firebaseRecyclerAdapter1);
@@ -126,7 +149,7 @@ public class EachArchiveActivity extends AppCompatActivity {
             mView = itemView;
         }
 
-        public void setDetails(final Context con,final String img, final String title, final String date, final String url){
+        public void setDetails(final Context con,final String img, final String title, final String date, final String url,final Button playPause){
             TextView dateL = (TextView) mView.findViewById(R.id.arc_date);
             TextView titleArc = (TextView)mView.findViewById(R.id.txt_arc_title);
             CircleImageView imgArc = (CircleImageView)mView.findViewById(R.id.img_arc_img);
@@ -136,8 +159,8 @@ public class EachArchiveActivity extends AppCompatActivity {
             titleArc.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {try {
-                    MediaPlayerMain.initializeMediaPlayer(url,con);
-                    MediaPlayerMain.playIt(url,con);
+                    MediaPlayerMain.initializeMediaPlayer(url,con,playPause);
+                    MediaPlayerMain.playIt(url,con,playPause);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

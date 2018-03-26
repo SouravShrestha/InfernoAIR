@@ -9,12 +9,19 @@ android:layout_height="match_parent"
 android:background="@color/backCard"
 tools:context="com.example.souravshrestha.newsbullets.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/lMain"
+        android:layout_above="@+id/layoutPlayer">
+
+        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
         android:id="@+id/mNav" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,21 +102,24 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:layout_width="match_parent"
             android:id="@+id/hScroll"
             android:scrollbars="none"
-            android:layout_below="@+id/title_list_trending"
             android:overScrollMode="never"
             android:background="@color/backCard"
-            android:layout_height="150dp">
+            android:layout_height="150dp"
+            android:layout_below="@+id/title_list_trending"
+            android:layout_alignLeft="@+id/cardBanner"
+            android:layout_alignStart="@+id/cardBanner">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/lTrending">
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:id="@+id/trending_view2"
                     android:background="@color/backCard"
                     android:layout_below="@+id/title_list_trending"
                     android:overScrollMode="never"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:layout_weight="1" />
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -117,7 +127,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                     android:background="@color/backCard"
                     android:layout_below="@+id/title_list_trending"
                     android:overScrollMode="never"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:layout_weight="1" />
 
                 <android.support.v7.widget.RecyclerView
@@ -126,7 +136,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                     android:background="@color/backCard"
                     android:layout_below="@+id/title_list_trending"
                     android:overScrollMode="never"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:layout_weight="1" />
             </LinearLayout>
         </HorizontalScrollView>
@@ -284,9 +294,64 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/title_list_archive"
+            android:id="@+id/title_text"
             android:background="@color/backCard"
             android:layout_below="@+id/bulletsView"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="Text News"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/titleNewsText"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="@android:color/black" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:id="@+id/spinnerTextNews"
+                android:padding="10dp"
+                android:layout_height="40dp"
+                android:layout_weight="4" />
+
+            <Button
+                android:text="View All"
+                android:foreground="?selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/viewAllClickTextNews"
+                android:background="@drawable/view_all_layout"
+                android:textAllCaps="false"
+                android:textColor="@color/cardview_dark_background"
+                android:layout_weight=".2"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/viewTextNews"
+            android:background="@color/backCard"
+            android:layout_below="@+id/title_text"
+            android:overScrollMode="never"
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_list_archive"
+            android:background="@color/backCard"
+            android:layout_below="@+id/viewTextNews"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical">
 
@@ -327,19 +392,74 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
 
         </android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/TextNews"
-            android:layout_centerVertical="true"
-            android:layout_below="@+id/archiveView" />
-
 
     </RelativeLayout>
 
 </ScrollView>
+
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:id="@+id/layoutPlayer"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content"
+        android:elevation="3dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:srcCompat="@mipmap/ic_language_black_18dp"
+            android:id="@+id/imageNowPlaying"
+            android:layout_weight="3"
+            android:padding="5dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/seekBar"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="7dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp" />
+
+            <TextView
+                android:text="No Track To Play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/playTitle"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/bPlayPause"
+            android:background="@drawable/play_button"
+            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+</RelativeLayout>
     <android.support.design.widget.NavigationView
     android:id="@+id/navBar"
     android:layout_width="250dp"
@@ -347,6 +467,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
     android:layout_gravity="start"
     android:clickable="false"
         android:background="@color/backCard"
+        android:foreground="?selectableItemBackground"
     android:contextClickable="false"
     app:headerLayout="@layout/nav_head"
     app:menu="@menu/nav_menu"

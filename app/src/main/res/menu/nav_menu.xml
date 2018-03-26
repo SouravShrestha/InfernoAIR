@@ -18,7 +18,7 @@
             android:id="@+id/language"
             android:icon="@mipmap/ic_language_black_18dp"
             android:checkable="true"
-            android:title="Change Language" />
+            android:title="Change App Language" />
 
     </group>
     <group android:checkableBehavior="single">
