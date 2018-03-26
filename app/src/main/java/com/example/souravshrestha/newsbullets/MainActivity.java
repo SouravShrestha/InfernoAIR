@@ -354,6 +354,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             startActivity(intent);
                         }catch(ActivityNotFoundException e){
                         }
+                        break;
                     case R.id.aboutUs:
                         final AwesomeInfoDialog dialog = new AwesomeInfoDialog(MainActivity.this);
                                 dialog.setTitle("Inferno AIR")
