@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +22,12 @@
         <activity android:name=".NewsBulletins" />
         <activity android:name=".EachBulletActivity" />
         <activity android:name=".RegionalBulletins" />
-        <activity android:name=".TextNews" />
+        <activity android:name=".FavoriteActivity" />
         <activity android:name=".RadioAll" />
         <activity android:name=".EachArchiveActivity" />
         <activity android:name=".ArchiveAll" />
-        <activity android:name=".EachTextNews" />
-        <activity android:name=".EachTextNewsContentActivity"></activity>
+        <activity android:name=".ShowTweet" />
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>

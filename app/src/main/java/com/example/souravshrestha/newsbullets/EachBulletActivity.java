@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -36,8 +37,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -47,9 +51,10 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
 
     RecyclerView mEachBulletList;
     TextView mTextHead;
-    String title,head;
+    public static String title,head;
     TextView mPlayTitle;
     Button playPause;
+    static SharedPreferences prefs=null;
     String dateSelected="";
     Toolbar mActionNav;
     HashSet<String> dropItems = new HashSet<String>();
@@ -61,15 +66,15 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     private ActionBarDrawerToggle mToggle;
     TextView selectDate;
     DatePickerDialog.OnDateSetListener mDateSetListener;
-    private DatabaseReference mData,mData2;
+    public static SharedPreferences shared;
+    public static ArrayList<String> arrPackage;
+    private DatabaseReference mData,mData2,mDataLang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_bullet);
         mNav = (NavigationView) findViewById(R.id.navBar1);
-        playPause = (Button)findViewById(R.id.bPlayPause);
-        mPlayTitle = (TextView)findViewById(R.id.playTitle);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
         setSupportActionBar(mActionNav);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout2);
@@ -86,10 +91,16 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         dropDown.setOnItemSelectedListener(this);
         mTextHead.setText(head);
         mData = FirebaseDatabase.getInstance().getReference("NewsBullets");
+        mDataLang = FirebaseDatabase.getInstance().getReference("lang_UI");
         mData2 = mData.child(title).child("List");
         mEachBulletList = (RecyclerView)findViewById(R.id.eachBulletListRecycle);
         mEachBulletList.setHasFixedSize(true);
         mEachBulletList.setLayoutManager(new LinearLayoutManager(this));
+        shared = getSharedPreferences("App_settings", MODE_PRIVATE);
+        if(getArrayList("Archive",this)!=null)
+            arrPackage = new ArrayList<>(getArrayList("Archive",this));
+        else
+            arrPackage = new ArrayList<>();
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +251,23 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         });
     }
 
+    public static void saveArrayList(ArrayList<String> list, String key,Context con){
+        prefs =con.getSharedPreferences("favourites",con.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.commit();
+    }
+
+    public static ArrayList<String> getArrayList(String key,Context con){
+        SharedPreferences prefs =con.getSharedPreferences("favourites",con.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
     private void loadBullet1(final String lan,final String dateSelected) {
 
         if(dateSelected !=null && dateSelected.length()>0) {
@@ -289,7 +317,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
 
                 if(validName.contains((getRef(position).getKey()))) {
                     validName.remove((getRef(position).getKey()));
-                    viewHolder.setDetails(getApplicationContext(),model.getUrl(),EachArchiveActivity.properDate(model.getDate()),playPause);
+                    viewHolder.setDetails(getApplicationContext(),model.getUrl(),EachArchiveActivity.properDate(model.getDate()));
                 }else{
                     viewHolder.itemView.setVisibility(View.GONE);
                     viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
@@ -311,6 +339,20 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
         loadBullet1(parent.getItemAtPosition(pos).toString(),this.dateSelected);
+        if(parent.getItemAtPosition(pos).toString().equalsIgnoreCase("bengali")){
+            mDataLang.child("Bengali/Morning News").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    Toast.makeText(EachBulletActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    mTextHead.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Toast.makeText(EachBulletActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -327,15 +369,45 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
             mView = itemView;
         }
 
-        public void setDetails(final Context con,final String url,String textDate,final Button playPause){
+        public void setDetails(final Context con, final String url, final String textDate){
             Button mPlayEach = (Button) mView.findViewById(R.id.eachBulletButton);
             TextView mTextBullet = (TextView)mView.findViewById(R.id.bullet_date);
             mTextBullet.setText(textDate);
+            final Button mFavorite = (Button)mView.findViewById(R.id.bFav);
+            if(arrPackage==null) {
+                mFavorite.setBackgroundResource(R.drawable.favorite_white);
+            }
+            else if(!arrPackage.contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+head)) {
+                mFavorite.setBackgroundResource(R.drawable.favorite_white);
+            }
+            else {
+                mFavorite.setBackgroundResource(R.drawable.favorite_red);
+            }
+
+            mFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(getArrayList("Archive",con)==null) {
+                        mFavorite.setBackgroundResource(R.drawable.favorite_red);
+                        arrPackage.add(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title);
+                    }
+                    else if(!getArrayList("Archive",con).contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title)){
+                        arrPackage.add(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title);
+                        mFavorite.setBackgroundResource(R.drawable.favorite_red);
+                    }
+                    else
+                    {
+                        arrPackage.remove((textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title));
+                        mFavorite.setBackgroundResource(R.drawable.favorite_white);
+                    }
+                    saveArrayList(arrPackage,"Archive",con);
+                }
+            });
             mPlayEach.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {try {
-                    MediaPlayerMain.initializeMediaPlayer(url,con,playPause);
-                    MediaPlayerMain.playIt(url,con,playPause);
+                    MediaPlayerMain.initializeMediaPlayer(url,con);
+                    MediaPlayerMain.playIt(url,con);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

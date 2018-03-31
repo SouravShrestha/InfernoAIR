@@ -36,7 +36,6 @@ public class RadioAll extends AppCompatActivity {
     private DrawerLayout mDraw;
     private NavigationView mNav;
     RecyclerView mRadioList;
-    TextView mPlayTitle;
     Button playPause;
     private DatabaseReference mDatabase;
     Toolbar mActionNav;
@@ -47,10 +46,6 @@ public class RadioAll extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio_all);
         mNav = (NavigationView) findViewById(R.id.navBar_radio);
-        playPause = (Button)findViewById(R.id.bPlayPause1);
-        MediaPlayerMain.changeButton(playPause);
-        mPlayTitle = (TextView)findViewById(R.id.playTitle1);
-        mPlayTitle.setText(MediaPlayerMain.textLabel);
         mDraw =(DrawerLayout) findViewById(R.id.drawLayout_radio);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
         setSupportActionBar(mActionNav);
@@ -112,15 +107,6 @@ public class RadioAll extends AppCompatActivity {
                 return false;
             }
         });
-
-        playPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MediaPlayerMain.pauseIt(playPause);
-            }
-        });
-
-
     }
 
     @Override
@@ -143,10 +129,8 @@ public class RadioAll extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         try {
-                            mPlayTitle.setText(model.getTitle());
-                            MediaPlayerMain.textLabel = model.getTitle();
-                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext(),playPause);
-                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext(),playPause);
+                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext());
+                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -161,8 +145,6 @@ public class RadioAll extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        MainActivity.mPlayTitle.setText(MediaPlayerMain.textLabel);
-        MediaPlayerMain.changeButton(MainActivity.playPause);
     }
 
     public static class RadioViewHolder extends RecyclerView.ViewHolder{

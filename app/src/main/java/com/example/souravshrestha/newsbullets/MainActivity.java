@@ -37,6 +37,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.ss.bottomnavigation.BottomNavigation;
+import com.ss.bottomnavigation.events.OnSelectedItemChangeListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     RecyclerView mBulletList,mRadioList,mArchiveList,mRegionalList,mTrendingView,mTrendingView2,mTrendingView3,mViewText;
     HashSet<String> dropItems = new HashSet<String>();
     HashSet<String> dropItemsRnd = new HashSet<String>();
-    HashSet<String> dropItemsTextNews = new HashSet<String>();
-    TextView textNews,vAllLive;
+    HashSet<String> dropItemsRadio = new HashSet<String>();
+    TextView vAllLive;
     TextView vAll;
     Toolbar mActionNav;
     public static TextView vAllArchive,mPlayTitle;
@@ -87,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mActionNav = (Toolbar)findViewById(R.id.mNav);
-        playPause = (Button)findViewById(R.id.bPlayPause);
-        MediaPlayerMain.changeButton(playPause);
-        mPlayTitle = (TextView)findViewById(R.id.playTitle);
-        mPlayTitle.setText(MediaPlayerMain.textLabel);
         setSupportActionBar(mActionNav);
         currRegion = "Aurangabad";
         currLanguage = "English";
@@ -103,33 +101,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mNav.setCheckedItem(R.id.home);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("NewsBullets");
         mDatabaseRegional = FirebaseDatabase.getInstance().getReference().child("RegionalBulletins");
-        mDatabaseNewsText = FirebaseDatabase.getInstance().getReference().child("TextNews");
         mDatabaseArchive = FirebaseDatabase.getInstance().getReference().child("Archives");
         mDatabaseRadio = FirebaseDatabase.getInstance().getReference().child("Stations");
         mBulletList = (RecyclerView)findViewById(R.id.bulletsView);
         mRadioList = (RecyclerView)findViewById(R.id.radioView_radio);
         mArchiveList = (RecyclerView)findViewById(R.id.archiveView);
+        vAllLive = (TextView)findViewById(R.id.viewAllClick_radio);
+        mRegionalList = (RecyclerView)findViewById(R.id.rndView);
+        dropDown = (Spinner)findViewById(R.id.spinner);
+        dropDownRnd = (Spinner)findViewById(R.id.spinner_rnd);
+        dropDownRadioMain = (Spinner)findViewById(R.id.spinner_FM);
+        myStr= FirebaseStorage.getInstance().getReference();
+        dropDown.setOnItemSelectedListener(this);
+        dropDownRnd.setOnItemSelectedListener(this);
+        dropDownRadioMain.setOnItemSelectedListener(this);
         mTrendingView = (RecyclerView)findViewById(R.id.trending_view);
         mTrendingView.setHasFixedSize(true);
         mTrendingView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTrendingView2 = (RecyclerView)findViewById(R.id.trending_view2);
         mTrendingView2.setHasFixedSize(true);
         mTrendingView2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mViewText = (RecyclerView)findViewById(R.id.viewTextNews);
-        mViewText.setHasFixedSize(true);
-        mViewText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mTrendingView3 = (RecyclerView)findViewById(R.id.trending_view3);
         mTrendingView3.setHasFixedSize(true);
         mTrendingView3.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        vAllLive = (TextView)findViewById(R.id.viewAllClick_radio);
-        mRegionalList = (RecyclerView)findViewById(R.id.rndView);
-        dropDown = (Spinner)findViewById(R.id.spinner);
-        dropDownRnd = (Spinner)findViewById(R.id.spinner_rnd);
-        dropDownNewsText = (Spinner)findViewById(R.id.spinnerTextNews);
-        myStr= FirebaseStorage.getInstance().getReference();
-        dropDown.setOnItemSelectedListener(this);
-        dropDownRnd.setOnItemSelectedListener(this);
-        dropDownNewsText.setOnItemSelectedListener(this);
         vAllArchive = (TextView) findViewById(R.id.viewAllClick_archive);
         vAll = (TextView)findViewById(R.id.viewAllClick);
         myRef = FirebaseDatabase.getInstance().getReference().child("ListBanner");
@@ -141,19 +135,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mRadioList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mArchiveList.setHasFixedSize(true);
         mArchiveList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        mTrendingView.setHasFixedSize(true);
-        mTrendingView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRegionalList.setHasFixedSize(true);
         mRegionalList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        loadTrending();
-        loadRadioList();
         loadArchiveList();
+        loadTrending();
         loadBullet();
-
-        playPause.setOnClickListener(new View.OnClickListener() {
+        BottomNavigation bottomNavigation=(BottomNavigation)findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnSelectedItemChangeListener(new OnSelectedItemChangeListener() {
             @Override
-            public void onClick(View view) {
-                MediaPlayerMain.pauseIt(playPause);
+            public void onSelectedItemChanged(int itemId) {
+                switch (itemId){
+                    case R.id.tab_home:
+
+                        break;
+                    case R.id.tab_radio:
+                        Intent inRadio = new Intent(MainActivity.this,RadioAll.class);
+                        startActivity(inRadio);
+                        break;
+                    case R.id.tab_search:
+                        Intent searchIn = new Intent(MainActivity.this,SearchActivity.class);
+                        startActivity(searchIn);
+                        break;
+                    case R.id.tab_twitter:
+                        Intent inTweet = new Intent(MainActivity.this,ShowTweet.class);
+                        startActivity(inTweet);
+                        break;
+                    case R.id.tab_aboutUs:
+//                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(MainActivity.this);
+//                        dialog.setTitle("Inferno AIR")
+//                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+//                                .setColoredCircle(R.color.colorPrimary)
+//                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+//                                .setCancelable(true)
+//                                .setPositiveButtonText("Take me back to the App")
+//                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+//                                .setPositiveButtonTextColor(R.color.white).
+//                                setPositiveButtonClick(new Closure() {
+//                                    @Override
+//                                    public void exec() {
+//                                        dialog.hide();
+//                                    }
+//                                });
+//                        dialog.show();
+                        Intent inFav = new Intent(MainActivity.this,FavoriteActivity.class);
+                        startActivity(inFav);
+                        break;
+                }
             }
         });
 
@@ -184,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Iterable<DataSnapshot> langChildren11 = lang.getChildren();
                         for (DataSnapshot lang1 : langChildren11) {
                             if(lang1.getKey().equalsIgnoreCase("title"))
-                                  dropItemsRnd.add(lang1.getValue().toString());
+                                dropItemsRnd.add(lang1.getValue().toString());
                         }
                     }
                 }
@@ -199,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         dropItemsListRnd.add(0,x);
                     }
                 }
-                ArrayAdapter<String> adapterRnd = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,dropItemsListRnd);
+                ArrayAdapter<String> adapterRnd = new ArrayAdapter<String>(MainActivity.this, R.layout.spinner_item,dropItemsListRnd);
                 adapterRnd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDownRnd.setAdapter(adapterRnd);
             }
@@ -210,34 +237,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
+
+        mDatabaseRadio.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dropItemsTextNews.clear();
+                dropItemsRadio.clear();
                 Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
                 for (DataSnapshot parentLang : langChildren1) {
                     Iterable<DataSnapshot> langChildren = parentLang.getChildren();
                     for (DataSnapshot lang : langChildren) {
-                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
-                        for (DataSnapshot lang1 : langChildren11) {
-                            if (lang1.getKey().equalsIgnoreCase("language"))
-                                dropItemsTextNews.add(lang1.getValue().toString());
+                        if(lang.getKey().equalsIgnoreCase("language")) {
+                            dropItemsRadio.add(lang.getValue().toString());
                         }
                     }
                 }
-                    ArrayList<String> dropItemsListText = new ArrayList<>(dropItemsTextNews);
-                    Collections.sort(dropItemsListText);
-                    for (int i = 0; i < dropItemsListText.size(); i++) {
-                        String x = dropItemsListText.get(i);
-                        if (x.equalsIgnoreCase(currLanguage)) {
-                            int index = dropItemsListText.indexOf(x);
-                            dropItemsListText.remove(index);
-                            dropItemsListText.add(0, x);
-                        }
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, dropItemsListText);
-                        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        dropDownNewsText.setAdapter(adapter1);
+
+                ArrayList<String> dropItemsListRadio = new ArrayList<>(dropItemsRadio);
+                Collections.sort(dropItemsListRadio);
+                for(int i =0 ;i<dropItemsListRadio.size();i++){
+                    String x = dropItemsListRadio.get(i);
+                    if(x.equalsIgnoreCase(currLanguage)){
+                        int index = dropItemsListRadio.indexOf(x);
+                        dropItemsListRadio.remove(index);
+                        dropItemsListRadio.add(0,x);
                     }
+                }
+                dropItemsListRadio.add(0,"Select Language");
+                ArrayAdapter<String> adapterRnd = new ArrayAdapter<String>(MainActivity.this, R.layout.spinner_item,dropItemsListRadio);
+                adapterRnd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dropDownRadioMain.setAdapter(adapterRnd);
             }
 
             @Override
@@ -245,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
             }
         });
+
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -269,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         dropItemsList.add(0,x);
                     }
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item,dropItemsList);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, R.layout.spinner_item,dropItemsList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDown.setAdapter(adapter);
             }
@@ -357,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         break;
                     case R.id.aboutUs:
                         final AwesomeInfoDialog dialog = new AwesomeInfoDialog(MainActivity.this);
-                                dialog.setTitle("Inferno AIR")
+                        dialog.setTitle("Inferno AIR")
                                 .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
                                 .setColoredCircle(R.color.colorPrimary)
                                 .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
@@ -378,45 +407,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-        System.exit(0);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-        switch (parent.getId()) {
-            case R.id.spinner:
-                currLanguage = parent.getItemAtPosition(pos).toString();
-                loadBullet1(parent.getItemAtPosition(pos).toString());
-                break;
-            case R.id.spinner_rnd:
-                loadRegionalList(parent.getItemAtPosition(pos).toString());
-                break;
-            case R.id.spinnerTextNews:
-                loadTextNewsList(parent.getItemAtPosition(pos).toString());
-                break;
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
     private void loadTrending(){
 
         FirebaseRecyclerAdapter<RadioReference,RadioViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<RadioReference, RadioViewHolder>(
@@ -424,13 +414,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ) {
             @Override
             protected void populateViewHolder(final RadioViewHolder viewHolder, final RadioReference model, final int position) {
+
                 viewHolder.setDetailsRadio(getApplicationContext(),model.getTitle(),model.getImage());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         double counter  = Double.parseDouble(model.getCount()) - 1;
                         mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
-                        Toast.makeText(MainActivity.this,model.getUrl().toString(),Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -482,6 +472,45 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mTrendingView3.setAdapter(firebaseRecyclerAdapter2);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+        System.exit(0);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+        switch (parent.getId()) {
+            case R.id.spinner_FM:
+                loadRadioList(parent.getItemAtPosition(pos).toString());
+                break;
+            case R.id.spinner:
+                currLanguage = parent.getItemAtPosition(pos).toString();
+                loadBullet1(parent.getItemAtPosition(pos).toString());
+                break;
+            case R.id.spinner_rnd:
+                loadRegionalList(parent.getItemAtPosition(pos).toString());
+                break;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     private void loadBullet() {
 
         FirebaseRecyclerAdapter<BullerDetails,BulletViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BullerDetails, BulletViewHolder>(
@@ -505,82 +534,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mBulletList.setAdapter(firebaseRecyclerAdapter);
     }
 
-    private void loadTextNewsList(final String language) {
-
-        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                validNameNews.clear();
-                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
-                for (DataSnapshot parentLang : langChildren1) {
-                    Iterable<DataSnapshot> langChildren = parentLang.getChildren();
-                    for (DataSnapshot lang : langChildren) {
-                        int k = 0;
-                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
-                        for (DataSnapshot lang1 : langChildren11) {
-                            if(lang1.getKey().equals("language") && lang1.getValue(String.class).equals(language)){
-                                k = 1;
-                            }
-                        }
-                        if(k==1){
-                            validNameNews.add(parentLang.child("title").getValue().toString());
-                        }
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        FirebaseRecyclerAdapter<TextNewsDetails,TextNewsViewHolder> firebaseRecyclerAdapterRegional = new FirebaseRecyclerAdapter<TextNewsDetails, MainActivity.TextNewsViewHolder>(
-              TextNewsDetails.class,R.layout.text_news_card,TextNewsViewHolder.class,mDatabaseNewsText
-                    ) {
-                        @Override
-                        protected void populateViewHolder(final TextNewsViewHolder viewHolder, final TextNewsDetails model, final int position) {
-                            if(validNameNews.contains((getRef(position).getKey()))) {
-                                validNameNews.remove((getRef(position).getKey()));
-                                viewHolder.setDetailsTextNews(getApplicationContext(), model.getTitle(), model.getImage());
-                                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent goText = new Intent(MainActivity.this,EachTextNews.class);
-                            goText.putExtra("title",model.getTitle());
-                            goText.putExtra("language",language);
-                            startActivity(goText);
-                        }
-                    });
-                }else{
-                    viewHolder.itemView.setVisibility(View.GONE);
-                    viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
-                }
-            }
-        };
-        mViewText.setAdapter(firebaseRecyclerAdapterRegional);
-    }
-
-    public static class TextNewsViewHolder extends RecyclerView.ViewHolder{
-
-        View mView;
-
-        public TextNewsViewHolder(View itemView) {
-            super(itemView);
-            mView = itemView;
-        }
-
-        public void setDetailsTextNews(Context con,String title_name,String img_src){
-            TextView title = (TextView)mView.findViewById(R.id.txt_txtNews);
-            ImageView arc_image_main = (ImageView)mView.findViewById(R.id.img_txtNews);
-            Glide.with(con).load(img_src).into(arc_image_main);
-            title.setText(title_name);
-        }
-
-    }
-
     private void loadRegionalList(final String region) {
 
         mDatabaseRegional.addValueEventListener(new ValueEventListener() {
@@ -601,7 +554,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                     if(k==1){
                         validNameRnd.add(parentLang.getKey());
-//                        Toast.makeText(MainActivity.this,parentLang.getKey(),Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -671,65 +623,96 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-            FirebaseRecyclerAdapter<BullerDetails,BulletViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BullerDetails, BulletViewHolder>(
-                    BullerDetails.class,R.layout.bullets_card,BulletViewHolder.class,mDatabase.orderByChild("count")
-            ) {
-                @Override
-                protected void populateViewHolder(final BulletViewHolder viewHolder, final BullerDetails model, final int position) {
-                    if(validName.contains((getRef(position).getKey()))) {
-                        validName.remove((getRef(position).getKey()));
-                        viewHolder.setDetails(getApplicationContext(), model.getImage(), model.getTitle());
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                double counter  = Double.parseDouble(model.getCount()) - 1;
-                                mDatabase.child(getRef(position).getKey()).child("count").setValue(String.valueOf(counter));
-                                Intent eachBullet = new Intent(MainActivity.this, EachBulletActivity.class);
-                                eachBullet.putExtra("curLang",currLanguage);
-                                eachBullet.putExtra("bulletName", (getRef(position).getKey()));
-                                eachBullet.putExtra("bulletTitle", model.getTitle());
-                                startActivity(eachBullet);
-                            }
-                        });
-                    }else{
-                            viewHolder.itemView.setVisibility(View.GONE);
-                            viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
-                    }
+        FirebaseRecyclerAdapter<BullerDetails,BulletViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BullerDetails, BulletViewHolder>(
+                BullerDetails.class,R.layout.bullets_card,BulletViewHolder.class,mDatabase.orderByChild("count")
+        ) {
+            @Override
+            protected void populateViewHolder(final BulletViewHolder viewHolder, final BullerDetails model, final int position) {
+                if(validName.contains((getRef(position).getKey()))) {
+                    validName.remove((getRef(position).getKey()));
+                    viewHolder.setDetails(getApplicationContext(), model.getImage(), model.getTitle());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            double counter  = Double.parseDouble(model.getCount()) - 1;
+                            mDatabase.child(getRef(position).getKey()).child("count").setValue(String.valueOf(counter));
+                            Intent eachBullet = new Intent(MainActivity.this, EachBulletActivity.class);
+                            eachBullet.putExtra("curLang",currLanguage);
+                            eachBullet.putExtra("bulletName", (getRef(position).getKey()));
+                            eachBullet.putExtra("bulletTitle", model.getTitle());
+                            startActivity(eachBullet);
+                        }
+                    });
+                }else{
+                    viewHolder.itemView.setVisibility(View.GONE);
+                    viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
                 }
-            };
+            }
+        };
 
         mBulletList.setAdapter(firebaseRecyclerAdapter);
     }
 
 
 
-    private void loadRadioList() {
+    private void loadRadioList(final String languageFM) {
 
-        FirebaseRecyclerAdapter<RadioReference,RadioViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<RadioReference, RadioViewHolder>(
-                RadioReference.class,R.layout.radio_card,RadioViewHolder.class,mDatabaseRadio.orderByChild("count").limitToFirst(5)
-        ) {
-            @Override
-            protected void populateViewHolder(final RadioViewHolder viewHolder, final RadioReference model, final int position) {
-                viewHolder.setDetailsRadio(getApplicationContext(),model.getTitle(),model.getImage());
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        double counter  = Double.parseDouble(model.getCount()) - 1;
-                        mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
-                        try {
-                            mPlayTitle.setText(model.getTitle());
-                            MediaPlayerMain.textLabel = model.getTitle();
-                            MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(),getApplicationContext(),playPause);
-                            MediaPlayerMain.playIt(model.getUrl().toString(),getApplicationContext(),playPause);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        if(languageFM.equalsIgnoreCase("Select Language")) {
+            FirebaseRecyclerAdapter<RadioReference, RadioViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<RadioReference, RadioViewHolder>(
+                    RadioReference.class, R.layout.radio_card, RadioViewHolder.class, mDatabaseRadio.orderByChild("count").limitToFirst(5)
+            ) {
+                @Override
+                protected void populateViewHolder(final RadioViewHolder viewHolder, final RadioReference model, final int position) {
+                    viewHolder.setDetailsRadio(getApplicationContext(), model.getTitle(), model.getImage());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            double counter = Double.parseDouble(model.getCount()) - 1;
+                            mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
+                            try {
+                                MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(), getApplicationContext());
+                                MediaPlayerMain.playIt(model.getUrl().toString(), getApplicationContext());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
-            }
-        };
+                    });
+                }
+            };
+            mRadioList.setAdapter(firebaseRecyclerAdapter);
+        }
+        else
+        {
+            FirebaseRecyclerAdapter<RadioReference, RadioViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<RadioReference, RadioViewHolder>(
+                    RadioReference.class, R.layout.radio_card, RadioViewHolder.class, mDatabaseRadio.orderByChild("count")
+            ) {
+                @Override
+                protected void populateViewHolder(final RadioViewHolder viewHolder, final RadioReference model, final int position) {
 
-        mRadioList.setAdapter(firebaseRecyclerAdapter);
+                    if(model.getLanguage().equalsIgnoreCase(languageFM))
+                    {
+                        viewHolder.setDetailsRadio(getApplicationContext(), model.getTitle(), model.getImage());
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                double counter = Double.parseDouble(model.getCount()) - 1;
+                                mDatabaseRadio.child(model.getTitle()).child("count").setValue(String.valueOf(counter));
+                                try {
+                                    MediaPlayerMain.initializeMediaPlayer(model.getUrl().toString(), getApplicationContext());
+                                    MediaPlayerMain.playIt(model.getUrl().toString(), getApplicationContext());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }else{
+                        viewHolder.itemView.setVisibility(View.GONE);
+                        viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
+                    }
+                }
+            };
+            mRadioList.setAdapter(firebaseRecyclerAdapter);
+        }
     }
 
     public static class RadioViewHolder extends RecyclerView.ViewHolder{
@@ -841,9 +824,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         public void setDetails(Context con,String img_name, String title_name){
             ImageView mImg = (ImageView) mView.findViewById(R.id.img_rnd);
-            TextView title = (TextView)mView.findViewById(R.id.txt_rnd);
             Glide.with(con).load(img_name).into(mImg);
-            title.setText(title_name);
         }
 
     }

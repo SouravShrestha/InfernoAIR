@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#424c54</color>
-    <color name="colorPrimaryDark">#3a4249</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#312E45</color>
+    <color name="colorPrimaryDark">#312E45</color>
+    <color name="colorAccent">#33ACAD</color>
+    <color name="background">#4A456A</color>
     <color name="playColor">#9ad19b</color>
     <color name="backCard">#f9fafc</color>
+    <color name="blueAccent">#7CD3FE</color>
 </resources>

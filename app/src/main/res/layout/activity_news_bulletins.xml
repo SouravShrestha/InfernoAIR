@@ -11,60 +11,70 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
-            android:id="@+id/mNav" />
+        android:layout_height="match_parent"
+        android:background="#1d2a54">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linew"
-        android:layout_below="@+id/mNav">
-
-        <android.support.v7.widget.CardView
+        <include
+            android:id="@+id/mNav"
+            layout="@layout/nav_action"
             android:layout_width="match_parent"
-            android:id="@+id/newsBulletBanner"
-            android:layout_margin="5dp"
-            android:layout_height="150dp">
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:text="News Bulletins"
+        <LinearLayout
+            android:id="@+id/linew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mNav"
+            android:background="#1d2a54"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/newsBulletBanner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/textView2"
-                android:gravity="center"
-                android:textSize="36sp"
-                android:background="@drawable/news_backs"
-                android:textColor="@color/cardview_dark_background"
-                android:textStyle="bold"
-                android:textAllCaps="false" />
+                android:layout_height="150dp"
+                android:layout_margin="5dp">
 
-        </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/news_backs"
+                    android:gravity="center"
+                    android:text="News Bulletins"
+                    android:textAllCaps="false"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
 
-    </LinearLayout>
-    <LinearLayout
-            android:orientation="vertical"
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-        android:layout_below="@+id/linew">
+            android:layout_below="@+id/linew"
+            android:background="#2b3b6e"
+            android:orientation="vertical">
 
             <Spinner
+                android:id="@+id/spin3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spin3"
-                android:padding="20dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:background="#2b3b6e"
+                android:padding="20dp" />
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/recAll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/recAll"
-                android:overScrollMode="never"
                 android:layout_below="@+id/spin3"
-                android:paddingLeft="5dp"
-                android:layout_marginRight="50dp" />
-    </LinearLayout>
+                android:layout_marginRight="50dp"
+                android:background="#1d2a54"
+                android:overScrollMode="never"
+                android:paddingLeft="5dp" />
+        </LinearLayout>
     </RelativeLayout>
     <android.support.design.widget.NavigationView
 android:id="@+id/navBar2"

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -33,7 +34,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -49,13 +54,17 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
     private DrawerLayout mDraw;
     private NavigationView mNav;
     private ActionBarDrawerToggle mToggle;
+    static SharedPreferences prefs=null;
     Toolbar mActionNav;
-    String title="";
-    String region;
+    static String title="";
+    static String time;
+    static String region;
     long count;
     DatabaseReference mDatabaseRegional;
     HashSet<String> dropItemsRegional = new HashSet<String>();
     ArrayList<String> validName = new ArrayList<>();
+    public static SharedPreferences shared;
+    public static ArrayList<String> arrPackage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +82,7 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         regionalListView.setHasFixedSize(true);
         regionalListView.setLayoutManager(new LinearLayoutManager(this));
-        String time = getIntent().getStringExtra("title");
+        time = getIntent().getStringExtra("title");
         String x[] = time.split(" ");
         title = x[0];
         selectDate = (TextView)findViewById(R.id.tDateRegional);
@@ -83,6 +92,13 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
         dropDownRegional.setOnItemSelectedListener(this);
         mTitle = (TextView)findViewById(R.id.title_rnd);
         mTitle.setText(region+"\n"+time);
+
+
+        shared = getSharedPreferences("App_settings", MODE_PRIVATE);
+        if(getArrayList("Archive",this)!=null)
+            arrPackage = new ArrayList<>(getArrayList("Archive",this));
+        else
+            arrPackage = new ArrayList<>();
 
         mNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -320,6 +336,23 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
         return super.onOptionsItemSelected(item);
     }
 
+    public static void saveArrayList(ArrayList<String> list, String key,Context con){
+        prefs =con.getSharedPreferences("favourites",con.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        editor.putString(key, json);
+        editor.commit();
+    }
+
+    public static ArrayList<String> getArrayList(String key,Context con){
+        SharedPreferences prefs =con.getSharedPreferences("favourites",con.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
     public static class RegionalListViewHolder extends RecyclerView.ViewHolder{
 
         View mView;
@@ -333,10 +366,44 @@ public class RegionalBulletins extends AppCompatActivity implements AdapterView.
             Button mPlayEach = (Button) mView.findViewById(R.id.eachBulletButton);
             TextView dateL = (TextView) mView.findViewById(R.id.tDateRegional);
             dateL.setText(date);
-            mPlayEach.setOnClickListener(new View.OnClickListener() {
+            final Button mFavorite = (Button)mView.findViewById(R.id.favIconReg);
+            if(arrPackage==null) {
+                mFavorite.setBackgroundResource(R.drawable.favorite_white);
+            }
+            else if(!arrPackage.contains(date+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(region.concat(time)))) {
+                mFavorite.setBackgroundResource(R.drawable.favorite_white);
+            }
+            else {
+                mFavorite.setBackgroundResource(R.drawable.favorite_red);
+            }
+
+            mFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(con,url,Toast.LENGTH_SHORT).show();
+                    if(getArrayList("Archive",con)==null) {
+                        mFavorite.setBackgroundResource(R.drawable.favorite_red);
+                        arrPackage.add(date+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(region.concat(time)));
+                    }
+                    else if(!getArrayList("Archive",con).contains(date+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(region.concat(time)))){
+                        arrPackage.add((date+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(region.concat(time))));
+                        mFavorite.setBackgroundResource(R.drawable.favorite_red);
+                    }
+                    else
+                    {
+                        arrPackage.remove((date+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(region.concat(time))));
+                        mFavorite.setBackgroundResource(R.drawable.favorite_white);
+                    }
+                    saveArrayList(arrPackage,"Archive",con);
+                }
+            });
+            mPlayEach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {try {
+                    MediaPlayerMain.initializeMediaPlayer(url,con);
+                    MediaPlayerMain.playIt(url,con);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 }
             });
         }

@@ -1,5 +1,6 @@
 package com.example.souravshrestha.newsbullets;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ss.bottomnavigation.BottomNavigation;
+import com.ss.bottomnavigation.events.OnSelectedItemChangeListener;
 
 public class ArchiveAll extends AppCompatActivity {
 
@@ -100,6 +103,48 @@ public class ArchiveAll extends AppCompatActivity {
                 return false;
             }
         });
+
+        BottomNavigation bottomNavigation=(BottomNavigation)findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnSelectedItemChangeListener(new OnSelectedItemChangeListener() {
+            @Override
+            public void onSelectedItemChanged(int itemId) {
+                switch (itemId){
+                    case R.id.tab_home:
+                        break;
+                    case R.id.tab_radio:
+                        Intent inRadio = new Intent(ArchiveAll.this,RadioAll.class);
+                        startActivity(inRadio);
+                        break;
+                    case R.id.tab_search:
+                        Intent searchIn = new Intent(ArchiveAll.this,SearchActivity.class);
+                        startActivity(searchIn);
+                        break;
+                    case R.id.tab_twitter:
+                        Intent inTweet = new Intent(ArchiveAll.this,ShowTweet.class);
+                        startActivity(inTweet);
+                        break;
+                    case R.id.tab_aboutUs:
+                        final AwesomeInfoDialog dialog = new AwesomeInfoDialog(ArchiveAll.this);
+                        dialog.setTitle("Inferno AIR")
+                                .setMessage("This Is the National News Broadcast App.\n\nDeveloped By : Team Inferno\n\n \tPlease note that the different channels may take 5 to 20 seconds to start playing, depending on your Internet Speed.")
+                                .setColoredCircle(R.color.colorPrimary)
+                                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("Take me back to the App")
+                                .setPositiveButtonbackgroundColor(R.color.colorPrimary)
+                                .setPositiveButtonTextColor(R.color.white).
+                                setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        dialog.hide();
+                                    }
+                                });
+                        dialog.show();
+                        break;
+                }
+            }
+        });
+
     }
 
 

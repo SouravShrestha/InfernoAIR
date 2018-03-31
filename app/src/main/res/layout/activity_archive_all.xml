@@ -11,47 +11,121 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backCard">
+        android:background="#1e2b55">
 
-        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
-            android:id="@+id/mNav" />
+        <include
+            android:id="@+id/mNav"
+            layout="@layout/nav_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:id="@+id/cardArchiveImage"
-        android:layout_margin="5dp"
-        android:layout_height="150dp"
-        android:layout_below="@+id/mNav">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardArchiveImage"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
+            android:layout_below="@+id/mNav"
+            android:layout_margin="5dp"
+            android:background="#1e2b55"
+            app:cardBackgroundColor="#1e2b55">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/news_back"
-            android:id="@+id/imageView2"
-            android:scaleType="centerCrop" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="7dp"
 
-        <TextView
-            android:text="Archives"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView"
-            android:layout_gravity="bottom|center"
-            android:textSize="36sp"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginBottom="7dp" />
-    </android.support.v7.widget.CardView>
+                android:textColor="@android:color/white"
+                android:textSize="36sp"
+                android:textStyle="bold" />
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/cardArchiveImage"
-        android:overScrollMode="never"
-        android:id="@+id/arcAll"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp" />
-</RelativeLayout>
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:layout_above="@+id/arcAll"
+                android:layout_alignStart="@+id/cardArchiveImage"
+                android:background="#2b3b6e"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/images" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/arcAll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/cardArchiveImage"
+            android:overScrollMode="never"
+            android:paddingBottom="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp" />
+
+        <com.ss.bottomnavigation.BottomNavigation
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="#2b3b6e"
+            android:forceHasOverlappingRendering="true"
+            app:mode="phone">
+
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_icon="@drawable/home_button1"
+                app:tab_text="Home"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_icon="@drawable/home_button"
+                app:unselected_tab_text_color="@color/black" />
+
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_radio"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_icon="@drawable/radio_pressed"
+                app:tab_text="Live FM"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_icon="@drawable/radio_main"
+                app:unselected_tab_text_color="@color/cardview_light_background" />
+
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_icon="@drawable/search_main1"
+                app:tab_text="Search"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_icon="@drawable/search_main"
+                app:unselected_tab_text_color="@color/cardview_light_background" />
+
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_twitter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_icon="@drawable/twitter_pressed"
+                app:tab_text="Twitter"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_icon="@drawable/twitter_main"
+                app:unselected_tab_text_color="@color/cardview_light_background" />
+
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_aboutUs"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_icon="@drawable/info_button1"
+                app:tab_text="About Us"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_icon="@drawable/info_button"
+                app:unselected_tab_text_color="@color/common_google_signin_btn_text_dark_default" />
+        </com.ss.bottomnavigation.BottomNavigation>
+
+    </RelativeLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navBar_arc"
         android:layout_height="match_parent"

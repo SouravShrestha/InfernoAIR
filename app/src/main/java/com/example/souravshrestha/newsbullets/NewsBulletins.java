@@ -86,14 +86,7 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
 
                 ArrayList<String> dropItemsList = new ArrayList<>(dropItems);
                 Collections.sort(dropItemsList);
-                for(int i =0 ;i<dropItemsList.size();i++){
-                    String x = dropItemsList.get(i);
-                    if(x.equalsIgnoreCase(curLang)){
-                        int index = dropItemsList.indexOf(x);
-                        dropItemsList.remove(index);
-                        dropItemsList.add(0,x);
-                    }
-                }
+                dropItemsList.add(0,"Select Your Language");
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewsBulletins.this, android.R.layout.simple_spinner_item,dropItemsList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 dropDown.setAdapter(adapter);
@@ -167,31 +160,33 @@ public class NewsBulletins extends AppCompatActivity implements AdapterView.OnIt
 
     private void loadBulletList() {
 
-        FirebaseRecyclerAdapter<BullerDetails,NewsBulletins.BulletViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BullerDetails, NewsBulletins.BulletViewHolder>(
-                BullerDetails.class,R.layout.bullet_all,NewsBulletins.BulletViewHolder.class,mDatabase.orderByChild("title")
+        final FirebaseRecyclerAdapter<BullerDetails,NewsBulletins.BulletViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<BullerDetails, NewsBulletins.BulletViewHolder>(
+                BullerDetails.class,R.layout.bullet_all,NewsBulletins.BulletViewHolder.class,mDatabase
         ) {
+
             @Override
-            protected void populateViewHolder(NewsBulletins.BulletViewHolder viewHolder,final BullerDetails model, final int position) {
-                viewHolder.setDetails(getApplicationContext(),model.getImage(),model.getTitle());
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        double counter  = Double.parseDouble(model.getCount()) - 1;
-                        mDatabase.child(getRef(position).getKey()).child("count").setValue(String.valueOf(counter));
-                        Intent eachBullet = new Intent(NewsBulletins.this,EachBulletActivity.class);
-                        eachBullet.putExtra("bulletName",(getRef(position).getKey()));
-                        startActivity(eachBullet);
-                    }
-                });
+            protected void populateViewHolder(final NewsBulletins.BulletViewHolder viewHolder, final BullerDetails model, final int position) {
+                    viewHolder.setDetails(getApplicationContext(), model.getImage(), model.getTitle());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent eachBullet = new Intent(NewsBulletins.this, EachBulletActivity.class);
+                            eachBullet.putExtra("bulletName", (getRef(position).getKey()));
+                            eachBullet.putExtra("bulletTitle", model.getTitle());
+                            startActivity(eachBullet);
+                        }
+                    });
             }
         };
-
         mBulletList.setAdapter(firebaseRecyclerAdapter);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-        loadBullet1(parent.getItemAtPosition(pos).toString());
+        if(parent.getItemAtPosition(pos).toString().equalsIgnoreCase("Select Your Language"))
+            loadBulletList();
+        else
+            loadBullet1(parent.getItemAtPosition(pos).toString());
     }
 
     @Override

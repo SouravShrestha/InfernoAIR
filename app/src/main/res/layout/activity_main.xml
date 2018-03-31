@@ -6,20 +6,22 @@ xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/drawLayout"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@color/backCard"
+android:background="@color/background"
 tools:context="com.example.souravshrestha.newsbullets.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/lMain"
-        android:layout_above="@+id/layoutPlayer">
+        android:layout_above="@+id/bottom_navigation"
+        android:background="@color/background">
 
         <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
         android:id="@+id/mNav" />
@@ -33,12 +35,12 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
     android:scrollbars="none"
     android:overScrollMode="never"
     tools:context="com.example.souravshrestha.newsbullets.MainActivity"
-    android:background="@android:color/white">
+    android:background="@color/background">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/backCard">
+        android:background="@color/background">
 
         <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -46,7 +48,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
         android:layout_height="175dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:background="@color/background">
 
             <android.support.v4.view.ViewPager
                 android:layout_width="match_parent"
@@ -54,7 +57,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:id="@+id/viewpager"
                 android:foreground="?selectableItemBackground"
 
-                >
+                android:background="@color/background">
 
         </android.support.v4.view.ViewPager>
             <me.relex.circleindicator.CircleIndicator
@@ -79,7 +82,7 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_list_trending"
-            android:background="@color/backCard"
+            android:background="@color/background"
             android:layout_below="@+id/cardBanner"
             android:layout_marginTop="5dp">
 
@@ -94,60 +97,19 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:paddingTop="5dp"
                 android:paddingBottom="10dp"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif"
+                android:textStyle="bold"
+                android:background="@color/background" />
 
         </LinearLayout>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:id="@+id/hScroll"
-            android:scrollbars="none"
-            android:overScrollMode="never"
-            android:background="@color/backCard"
-            android:layout_height="150dp"
-            android:layout_below="@+id/title_list_trending"
-            android:layout_alignLeft="@+id/cardBanner"
-            android:layout_alignStart="@+id/cardBanner"
-            android:layout_marginLeft="-5dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="horizontal"
-                android:id="@+id/lTrending">
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:id="@+id/trending_view2"
-                    android:background="@color/backCard"
-                    android:layout_below="@+id/title_list_trending"
-                    android:overScrollMode="never"
-                    android:layout_height="150dp"
-                    android:layout_weight="1" />
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:id="@+id/trending_view3"
-                    android:background="@color/backCard"
-                    android:layout_below="@+id/title_list_trending"
-                    android:overScrollMode="never"
-                    android:layout_height="150dp"
-                    android:layout_weight="1" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:id="@+id/trending_view"
-                    android:background="@color/backCard"
-                    android:layout_below="@+id/title_list_trending"
-                    android:overScrollMode="never"
-                    android:layout_height="150dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-        </HorizontalScrollView>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_list_radio"
-            android:background="@color/backCard"
+            android:background="@color/background"
             android:layout_marginTop="5dp"
             android:layout_below="@+id/hScroll"
             android:gravity="center_vertical">
@@ -163,16 +125,27 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:layout_weight="1"
                 android:paddingTop="5dp"
                 android:gravity="center_vertical"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/white"
+                android:background="@color/background"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:id="@+id/spinner_FM"
+                android:padding="10dp"
+                android:layout_height="40dp"
+                android:layout_weight="4"
+                android:background="@color/background" />
 
             <Button
                 android:text="View All"
                 android:foreground="?selectableItemBackground"
                 android:layout_width="78dp"
                 android:id="@+id/viewAllClick_radio"
-                android:background="@drawable/view_all_layout"
+                android:background="@color/colorAccent"
                 android:textAllCaps="false"
-                android:textColor="@color/cardview_dark_background"
+                android:textColor="@color/white"
                 android:layout_weight=".1"
                 android:layout_marginRight="5dp"
                 android:layout_height="30dp" />
@@ -180,23 +153,82 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:id="@+id/radioView_radio"
-       android:background="@color/backCard"
-       android:layout_below="@+id/title_list_radio"
-       android:overScrollMode="never"
-       android:layout_height="150dp"
+            android:layout_width="match_parent"
+            android:id="@+id/radioView_radio"
+            android:background="@color/background"
+            android:layout_below="@+id/title_list_radio"
+            android:overScrollMode="never"
+            android:layout_height="150dp"
             android:layout_marginTop="5dp">
 
-   </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_list"
+            android:background="@color/background"
+            android:layout_below="@+id/radioView_radio"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="NSD Bulletins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/titleText"
+                android:layout_weight="1"
+                android:padding="2dp"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="@color/white"
+                android:background="@color/background"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif" />
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:id="@+id/spinner"
+                android:padding="10dp"
+                android:layout_height="40dp"
+                android:layout_weight="4"
+                android:background="@color/background" />
+
+            <Button
+                android:text="View All"
+                android:foreground="?selectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:id="@+id/viewAllClick"
+                android:background="@color/colorAccent"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_weight=".2"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/bulletsView"
+            android:background="@color/background"
+            android:layout_below="@+id/title_list"
+            android:overScrollMode="never"
+            android:layout_height="150dp"
+            android:layout_marginTop="5dp">
+
+        </android.support.v7.widget.RecyclerView>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_rnd"
-            android:background="@color/backCard"
-            android:layout_below="@+id/radioView_radio"
+            android:background="@color/background"
+            android:layout_below="@+id/bulletsView"
             android:layout_marginTop="5dp">
 
             <TextView
@@ -209,7 +241,10 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:paddingTop="5dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:background="@color/background" />
 
             <Spinner
                 android:layout_width="wrap_content"
@@ -220,115 +255,57 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="60dp"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:background="@color/background" />
 
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:id="@+id/rndView"
-            android:background="@color/backCard"
-            android:layout_below="@+id/title_rnd"
-            android:layout_height="150dp"
-            android:overScrollMode="never"
-            android:layout_marginTop="5dp">
-
-        </android.support.v7.widget.RecyclerView>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/title_list"
-            android:background="@color/backCard"
+            android:id="@+id/title_textNews"
+            android:background="@color/background"
             android:layout_below="@+id/rndView"
-            android:layout_marginTop="5dp"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:text="News Bulletins"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/titleText"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:textSize="20sp"
-                android:layout_marginLeft="10dp"
-                android:paddingTop="5dp"
-                android:textColor="@android:color/black" />
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:id="@+id/spinner"
-                android:padding="10dp"
-                android:layout_height="40dp"
-                android:layout_weight="4" />
-
-            <Button
-                android:text="View All"
-                android:foreground="?selectableItemBackground"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:id="@+id/viewAllClick"
-                android:background="@drawable/view_all_layout"
-                android:textAllCaps="false"
-                android:textColor="@color/cardview_dark_background"
-                android:layout_weight=".2"
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center_vertical" />
-
-        </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:id="@+id/bulletsView"
-            android:background="@color/backCard"
-            android:layout_below="@+id/title_list"
-            android:overScrollMode="never"
-            android:layout_height="150dp"
-            android:layout_marginTop="5dp">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/title_text"
-            android:background="@color/backCard"
-            android:layout_below="@+id/bulletsView"
-            android:layout_marginTop="5dp"
             android:gravity="center_vertical">
 
             <TextView
                 android:text="Text News"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/titleNewsText"
+                android:id="@+id/titletextNews"
                 android:layout_weight="1"
                 android:padding="2dp"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:paddingTop="5dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/white"
+                android:background="@color/background"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical" />
 
             <Spinner
                 android:layout_width="wrap_content"
-                android:id="@+id/spinnerTextNews"
-                android:padding="10dp"
+                android:id="@+id/spinner_textNews"
+                android:overScrollMode="never"
                 android:layout_height="40dp"
-                android:layout_weight="4" />
+                android:layout_weight="4"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="60dp"
+                android:paddingTop="10dp"
+                android:background="@color/background" />
 
             <Button
                 android:text="View All"
                 android:foreground="?selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/viewAllClickTextNews"
-                android:background="@drawable/view_all_layout"
+                android:id="@+id/viewAllTextNews"
+                android:background="@color/colorAccent"
                 android:textAllCaps="false"
-                android:textColor="@color/cardview_dark_background"
+                android:textColor="@color/white"
                 android:layout_weight=".2"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical" />
@@ -336,12 +313,13 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:id="@+id/viewTextNews"
-            android:background="@color/backCard"
-            android:layout_below="@+id/title_text"
-            android:overScrollMode="never"
+            android:id="@+id/TextNewsView"
+            android:background="@color/background"
+            android:layout_below="@+id/title_textNews"
             android:layout_height="150dp"
+            android:overScrollMode="never"
             android:layout_marginTop="5dp">
 
         </android.support.v7.widget.RecyclerView>
@@ -351,8 +329,8 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_list_archive"
-            android:background="@color/backCard"
-            android:layout_below="@+id/viewTextNews"
+            android:background="@color/background"
+            android:layout_below="@+id/TextNewsView"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical">
 
@@ -366,7 +344,10 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:paddingTop="5dp"
-                android:textColor="@android:color/black" />
+                android:textColor="@color/white"
+                android:background="@color/background"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif" />
 
             <Button
                 android:text="View All"
@@ -374,9 +355,9 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:layout_width="78dp"
                 android:layout_height="30dp"
                 android:id="@+id/viewAllClick_archive"
-                android:background="@drawable/view_all_layout"
+                android:background="@color/colorAccent"
                 android:textAllCaps="false"
-                android:textColor="@color/cardview_dark_background"
+                android:textColor="@color/white"
                 android:layout_weight=".05"
                 android:layout_marginRight="5dp" />
 
@@ -385,11 +366,66 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:id="@+id/archiveView"
-            android:background="@color/backCard"
+            android:background="@color/background"
             android:layout_below="@+id/title_list_archive"
             android:overScrollMode="never"
             android:layout_height="150dp"
             android:layout_marginTop="5dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:id="@+id/hScroll"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:background="@color/background"
+            android:layout_height="150dp"
+            android:layout_below="@+id/title_list_trending"
+            android:layout_centerHorizontal="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal"
+                android:id="@+id/lTrending"
+                android:background="@color/background">
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/trending_view2"
+                    android:background="@color/background"
+                    android:layout_below="@+id/title_list_trending"
+                    android:overScrollMode="never"
+                    android:layout_height="150dp"
+                    android:layout_weight="1" />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/trending_view3"
+                    android:background="@color/background"
+                    android:layout_below="@+id/title_list_trending"
+                    android:overScrollMode="never"
+                    android:layout_height="150dp"
+                    android:layout_weight="1" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/trending_view"
+                    android:background="@color/background"
+                    android:layout_below="@+id/title_list_trending"
+                    android:overScrollMode="never"
+                    android:layout_height="150dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <android.support.v7.widget.RecyclerView
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:id="@+id/rndView"
+            android:background="@color/background"
+            android:layout_height="150dp"
+            android:overScrollMode="never"
+            android:layout_below="@+id/title_rnd"
+            android:layout_alignParentStart="true">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -398,77 +434,83 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
 
 </ScrollView>
 
+
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:id="@+id/layoutPlayer"
-        android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
-        android:layout_height="wrap_content"
-        android:elevation="3dp">
-
-        <ImageView
+        <com.ss.bottomnavigation.BottomNavigation
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimaryDark"
+            app:mode="phone"
+            android:forceHasOverlappingRendering="true"
             android:layout_height="50dp"
-            app:srcCompat="@mipmap/ic_language_black_18dp"
-            android:id="@+id/imageNowPlaying"
-            android:layout_weight="3"
-            android:padding="5dp" />
+            android:elevation="6dp">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <SeekBar
-                android:layout_width="match_parent"
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_home"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/seekBar"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="7dp"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp" />
-
-            <TextView
-                android:text="No Track To Play"
-                android:layout_width="match_parent"
+                app:tab_text="Home"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_text_color="@color/black"
+                app:tab_icon="@drawable/home_button1"
+                app:unselected_tab_icon="@drawable/home_button"
+                />
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_radio"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/playTitle"
                 android:layout_weight="1"
-                android:gravity="left|center"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:paddingLeft="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/bPlayPause"
-            android:background="@drawable/play_button"
-            android:layout_height="25dp"
-            android:layout_width="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="center" />
-
-    </LinearLayout>
-</RelativeLayout>
+                app:tab_text="Live FM"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_text_color="@color/black"
+                app:tab_icon="@drawable/radio_pressed"
+                app:unselected_tab_icon="@drawable/radio_main"
+                />
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_text="Search"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_text_color="@color/black"
+                app:tab_icon="@drawable/search_main1"
+                app:unselected_tab_icon="@drawable/search_main"
+                />
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_twitter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_text="Twitter"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_text_color="@color/black"
+                app:tab_icon="@drawable/twitter_pressed"
+                app:unselected_tab_icon="@drawable/twitter_main"
+                />
+            <com.ss.bottomnavigation.TabItem
+                android:id="@+id/tab_aboutUs"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:tab_text="About Us"
+                app:tab_text_color="#E72C30"
+                app:unselected_tab_text_color="@color/black"
+                app:tab_icon="@drawable/info_button1"
+                app:unselected_tab_icon="@drawable/info_button"
+                />
+        </com.ss.bottomnavigation.BottomNavigation>
+    </RelativeLayout>
     <android.support.design.widget.NavigationView
     android:id="@+id/navBar"
     android:layout_width="250dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:clickable="false"
-        android:background="@color/backCard"
-        android:foreground="?selectableItemBackground"
+        android:background="@color/background"
     android:contextClickable="false"
     app:headerLayout="@layout/nav_head"
     app:menu="@menu/nav_menu"

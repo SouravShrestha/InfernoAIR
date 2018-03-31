@@ -11,45 +11,49 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#1e2b55">
 
-        <include layout="@layout/nav_action" android:layout_height="wrap_content" android:layout_width="match_parent"
-            android:id="@+id/mNav" />
+        <include
+            android:id="@+id/mNav"
+            layout="@layout/nav_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_margin="5dp"
-        android:id="@+id/cardTitleArchive"
-        android:layout_below="@+id/mNav">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardTitleArchive"
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:layout_below="@+id/mNav"
+            android:layout_margin="5dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/news_back"
-            android:id="@+id/imageView3"
-            android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/news_back" />
 
-        <TextView
-            android:text="Achive Title Goes Here"
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:gravity="bottom|center"
+                android:text="Achive Title Goes Here"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/viewEachArchive"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/textView3"
-            android:gravity="bottom|center"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp" />
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:id="@+id/viewEachArchive"
-        android:layout_below="@+id/cardTitleArchive"
-        android:padding="5dp" />
-</RelativeLayout>
+            android:layout_below="@+id/cardTitleArchive"
+            android:overScrollMode="never"
+            android:padding="5dp" />
+    </RelativeLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navBar4"
         android:layout_width="250dp"
