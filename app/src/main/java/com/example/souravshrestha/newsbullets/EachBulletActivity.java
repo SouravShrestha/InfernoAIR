@@ -54,7 +54,6 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     public static String title,head;
     TextView mPlayTitle;
     Button playPause;
-    static SharedPreferences prefs=null;
     String dateSelected="";
     Toolbar mActionNav;
     HashSet<String> dropItems = new HashSet<String>();
@@ -64,11 +63,15 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
     private DrawerLayout mDraw;
     private NavigationView mNav;
     private ActionBarDrawerToggle mToggle;
+    static SharedPreferences prefs=null;
     TextView selectDate;
     DatePickerDialog.OnDateSetListener mDateSetListener;
+    private DatabaseReference mData,mData2,mDataLang;
     public static SharedPreferences shared;
     public static ArrayList<String> arrPackage;
-    private DatabaseReference mData,mData2,mDataLang;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,6 +99,7 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
         mEachBulletList = (RecyclerView)findViewById(R.id.eachBulletListRecycle);
         mEachBulletList.setHasFixedSize(true);
         mEachBulletList.setLayoutManager(new LinearLayoutManager(this));
+
         shared = getSharedPreferences("App_settings", MODE_PRIVATE);
         if(getArrayList("Archive",this)!=null)
             arrPackage = new ArrayList<>(getArrayList("Archive",this));
@@ -369,15 +373,16 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
             mView = itemView;
         }
 
-        public void setDetails(final Context con, final String url, final String textDate){
+        public void setDetails(final Context con,final String url,final String textDate){
             Button mPlayEach = (Button) mView.findViewById(R.id.eachBulletButton);
             TextView mTextBullet = (TextView)mView.findViewById(R.id.bullet_date);
             mTextBullet.setText(textDate);
-            final Button mFavorite = (Button)mView.findViewById(R.id.bFav);
+
+            final Button mFavorite = (Button)mView.findViewById(R.id.favIconNsd);
             if(arrPackage==null) {
                 mFavorite.setBackgroundResource(R.drawable.favorite_white);
             }
-            else if(!arrPackage.contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+head)) {
+            else if(!arrPackage.contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title)) {
                 mFavorite.setBackgroundResource(R.drawable.favorite_white);
             }
             else {
@@ -389,20 +394,21 @@ public class EachBulletActivity extends AppCompatActivity implements AdapterView
                 public void onClick(View view) {
                     if(getArrayList("Archive",con)==null) {
                         mFavorite.setBackgroundResource(R.drawable.favorite_red);
-                        arrPackage.add(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title);
+                        arrPackage.add(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(title));
                     }
-                    else if(!getArrayList("Archive",con).contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title)){
-                        arrPackage.add(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title);
+                    else if(!getArrayList("Archive",con).contains(textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(title))){
+                        arrPackage.add((textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title));
                         mFavorite.setBackgroundResource(R.drawable.favorite_red);
                     }
                     else
                     {
-                        arrPackage.remove((textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+title));
+                        arrPackage.remove((textDate+";"+url+";"+"https://firebasestorage.googleapis.com/v0/b/myair-e9a7d.appspot.com/o/country_wide.jpg?alt=media&token=096cd06a-00d0-45fa-9ff5-5a65b246315d"+";"+(title)));
                         mFavorite.setBackgroundResource(R.drawable.favorite_white);
                     }
                     saveArrayList(arrPackage,"Archive",con);
                 }
             });
+
             mPlayEach.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {try {

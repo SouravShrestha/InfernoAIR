@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     TextView vAll;
     Toolbar mActionNav;
     public static TextView vAllArchive,mPlayTitle;
+    HashSet<String> dropItemsTextNews = new HashSet<String>();
     Spinner dropDown,dropDownRadioMain,dropDownRnd,dropDownNewsText;
     private DrawerLayout mDraw;
     private NavigationView mNav;
@@ -127,7 +128,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         vAllArchive = (TextView) findViewById(R.id.viewAllClick_archive);
         vAll = (TextView)findViewById(R.id.viewAllClick);
         myRef = FirebaseDatabase.getInstance().getReference().child("ListBanner");
+        mDatabaseNewsText = FirebaseDatabase.getInstance().getReference().child("TextNews");
+        mViewText = (RecyclerView)findViewById(R.id.viewTextNews);
+        mViewText.setHasFixedSize(true);
+        mViewText.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        dropDownNewsText = (Spinner)findViewById(R.id.spinnerTextNews);
         viewPager=(ViewPager)findViewById(R.id.viewpager);
+        dropDownNewsText.setOnItemSelectedListener(this);
         indicator=(CircleIndicator) findViewById(R.id.indicator);
         mBulletList.setHasFixedSize(true);
         mBulletList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -181,6 +188,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         startActivity(inFav);
                         break;
                 }
+            }
+        });
+
+        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dropItemsTextNews.clear();
+                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
+                for (DataSnapshot parentLang : langChildren1) {
+                    Iterable<DataSnapshot> langChildren = parentLang.getChildren();
+                    for (DataSnapshot lang : langChildren) {
+                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
+                        for (DataSnapshot lang1 : langChildren11) {
+                            if (lang1.getKey().equalsIgnoreCase("language"))
+                                dropItemsTextNews.add(lang1.getValue().toString());
+                        }
+                    }
+                }
+                ArrayList<String> dropItemsListText = new ArrayList<>(dropItemsTextNews);
+                Collections.sort(dropItemsListText);
+                for (int i = 0; i < dropItemsListText.size(); i++) {
+                    String x = dropItemsListText.get(i);
+                    if (x.equalsIgnoreCase(currLanguage)) {
+                        int index = dropItemsListText.indexOf(x);
+                        dropItemsListText.remove(index);
+                        dropItemsListText.add(0, x);
+                    }
+                    ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_item, dropItemsListText);
+                    adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    dropDownNewsText.setAdapter(adapter1);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -495,6 +538,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case R.id.spinner_rnd:
                 loadRegionalList(parent.getItemAtPosition(pos).toString());
                 break;
+            case R.id.spinnerTextNews:
+                loadTextNewsList(parent.getItemAtPosition(pos).toString());
+                break;
         }
     }
 
@@ -794,6 +840,84 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onResume();
         runnable.run();
     }
+
+    private void loadTextNewsList(final String language) {
+
+        mDatabaseNewsText.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                validNameNews.clear();
+                Iterable<DataSnapshot> langChildren1 = dataSnapshot.getChildren();
+                for (DataSnapshot parentLang : langChildren1) {
+                    Iterable<DataSnapshot> langChildren = parentLang.getChildren();
+                    for (DataSnapshot lang : langChildren) {
+                        int k = 0;
+                        Iterable<DataSnapshot> langChildren11 = lang.getChildren();
+                        for (DataSnapshot lang1 : langChildren11) {
+                            if(lang1.getKey().equals("language") && lang1.getValue(String.class).equals(language)){
+                                k = 1;
+                            }
+                        }
+                        if(k==1){
+//                            validNameNews.add(parentLang.child("title").getValue().toString());
+                              validNameNews.add(parentLang.child("title").getValue().toString());
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity.this,"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        FirebaseRecyclerAdapter<TextNewsDetails,TextNewsViewHolder> firebaseRecyclerAdapterRegional = new FirebaseRecyclerAdapter<TextNewsDetails, MainActivity.TextNewsViewHolder>(
+                TextNewsDetails.class,R.layout.text_news_card,TextNewsViewHolder.class,mDatabaseNewsText
+        ) {
+            @Override
+            protected void populateViewHolder(final TextNewsViewHolder viewHolder, final TextNewsDetails model, final int position) {
+                if(validNameNews.contains((getRef(position).getKey()))) {
+                    validNameNews.remove((getRef(position).getKey()));
+                    viewHolder.setDetailsTextNews(getApplicationContext(), model.getTitle(), model.getImage());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent goText = new Intent(MainActivity.this,EachTextNews.class);
+                            goText.putExtra("title",model.getTitle());
+                            goText.putExtra("language",language);
+                            startActivity(goText);
+                        }
+                    });
+                }else{
+                    viewHolder.itemView.setVisibility(View.GONE);
+                    viewHolder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
+                }
+            }
+        };
+        mViewText.setAdapter(firebaseRecyclerAdapterRegional);
+    }
+
+    public static class TextNewsViewHolder extends RecyclerView.ViewHolder{
+
+        View mView;
+
+        public TextNewsViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
+
+        public void setDetailsTextNews(Context con,String title_name,String img_src){
+            TextView title = (TextView)mView.findViewById(R.id.txt_txtNews);
+            ImageView arc_image_main = (ImageView)mView.findViewById(R.id.img_txtNews);
+            Glide.with(con).load(img_src).into(arc_image_main);
+            title.setText(title_name);
+        }
+
+    }
+
 
     public static class BulletViewHolder extends RecyclerView.ViewHolder{
 

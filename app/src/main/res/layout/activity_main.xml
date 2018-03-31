@@ -264,37 +264,31 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/title_textNews"
+            android:id="@+id/title_text"
             android:background="@color/background"
             android:layout_below="@+id/rndView"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical">
 
             <TextView
                 android:text="Text News"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/titletextNews"
+                android:id="@+id/titleNewsText"
                 android:layout_weight="1"
                 android:padding="2dp"
                 android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:paddingTop="5dp"
                 android:textColor="@color/white"
-                android:background="@color/background"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:gravity="center_vertical" />
+                android:background="@color/background" />
 
             <Spinner
                 android:layout_width="wrap_content"
-                android:id="@+id/spinner_textNews"
-                android:overScrollMode="never"
+                android:id="@+id/spinnerTextNews"
+                android:padding="10dp"
                 android:layout_height="40dp"
                 android:layout_weight="4"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="60dp"
-                android:paddingTop="10dp"
                 android:background="@color/background" />
 
             <Button
@@ -302,10 +296,10 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
                 android:foreground="?selectableItemBackground"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/viewAllTextNews"
+                android:id="@+id/viewAllClickTextNews"
                 android:background="@color/colorAccent"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:layout_weight=".2"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center_vertical" />
@@ -313,24 +307,22 @@ tools:context="com.example.souravshrestha.newsbullets.MainActivity">
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:id="@+id/TextNewsView"
+            android:id="@+id/viewTextNews"
             android:background="@color/background"
-            android:layout_below="@+id/title_textNews"
-            android:layout_height="150dp"
+            android:layout_below="@+id/title_text"
             android:overScrollMode="never"
+            android:layout_height="150dp"
             android:layout_marginTop="5dp">
 
         </android.support.v7.widget.RecyclerView>
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/title_list_archive"
             android:background="@color/background"
-            android:layout_below="@+id/TextNewsView"
+            android:layout_below="@+id/viewTextNews"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical">
 

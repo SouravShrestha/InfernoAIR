@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/linearEachBulletList"
+        android:layout_marginTop="10dp"
+        android:foreground="?selectableItemBackground"
+        android:background="@android:color/white">
+
+
+        <TextView
+            android:text="Headline goes here"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/headNews"
+            android:layout_weight=".7"
+            android:gravity="left"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:text="Date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/news_date"
+            android:layout_weight=".7"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimary"
+            android:gravity="left"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="1dp" />
+
+</LinearLayout>

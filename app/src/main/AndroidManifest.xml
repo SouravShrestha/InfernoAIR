@@ -22,6 +22,10 @@
         <activity android:name=".NewsBulletins" />
         <activity android:name=".EachBulletActivity" />
         <activity android:name=".RegionalBulletins" />
+        <activity android:name=".TextNews" />
+        <activity android:name=".EachTextNews" />
+        <activity android:name=".EachTextNewsContentActivity" />
+
         <activity android:name=".FavoriteActivity" />
         <activity android:name=".RadioAll" />
         <activity android:name=".EachArchiveActivity" />
